@@ -1,0 +1,13 @@
+# Core data manipulation and analysis
+pandas
+ydata-profiling
+setuptools
+
+# YAML processing for contract generation
+pyyaml
+
+# Git integration for attribution (needed for final submission, but good to have)
+gitpython
+
+# Schema validation
+jsonschema

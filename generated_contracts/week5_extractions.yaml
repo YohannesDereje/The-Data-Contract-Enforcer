@@ -1,0 +1,154 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: week5-contract-v1
+info:
+  title: Week5 Data Contract
+  version: 1.0.0
+  owner: data-engineering
+  description: Auto-generated data contract for the week5 system, produced by the
+    Data Contract Enforcer pipeline.
+servers:
+  local:
+    type: local
+    path: outputs/week5/events.jsonl
+    format: jsonl
+terms:
+  usage: Internal analytics and downstream contract validation only.
+  limitations: Not for use in production serving without manual review.
+schema:
+  event_id:
+    type: string
+    required: true
+    unique: true
+    description: Field 'event_id' of type string.
+  event_type:
+    type: string
+    required: true
+    unique: false
+    description: Field 'event_type' of type string.
+  aggregate_id:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''aggregate_id'' of type string. Warning: 100.0% of values
+      are missing.'
+  aggregate_type:
+    type: string
+    required: true
+    unique: false
+    description: Field 'aggregate_type' of type string.
+  sequence_number:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''sequence_number'' of type string. Warning: 100.0% of values
+      are missing.'
+  schema_version:
+    type: string
+    required: true
+    unique: false
+    description: Field 'schema_version' of type string.
+  occurred_at:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''occurred_at'' of type string. Warning: 100.0% of values
+      are missing.'
+  recorded_at:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''recorded_at'' of type string. Warning: 100.0% of values
+      are missing.'
+  metadata.causation_id:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''metadata.causation_id'' of type string. Warning: 100.0%
+      of values are missing.'
+  metadata.correlation_id:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''metadata.correlation_id'' of type string. Warning: 100.0%
+      of values are missing.'
+  metadata.user_id:
+    type: string
+    required: true
+    unique: false
+    description: Field 'metadata.user_id' of type string.
+  metadata.source_service:
+    type: string
+    required: true
+    unique: false
+    description: Field 'metadata.source_service' of type string.
+quality:
+  type: SodaChecks
+  checks:
+  - type: missing_count
+    column: event_id
+    must_be: '='
+    value: 0
+    name: event_id_no_missing_values
+  - type: duplicate_count
+    column: event_id
+    must_be: '='
+    value: 0
+    name: event_id_no_duplicates
+  - type: missing_count
+    column: event_type
+    must_be: '='
+    value: 0
+    name: event_type_no_missing_values
+  - type: missing_count
+    column: aggregate_id
+    must_be: '='
+    value: 0
+    name: aggregate_id_no_missing_values
+  - type: missing_count
+    column: aggregate_type
+    must_be: '='
+    value: 0
+    name: aggregate_type_no_missing_values
+  - type: missing_count
+    column: sequence_number
+    must_be: '='
+    value: 0
+    name: sequence_number_no_missing_values
+  - type: missing_count
+    column: schema_version
+    must_be: '='
+    value: 0
+    name: schema_version_no_missing_values
+  - type: missing_count
+    column: occurred_at
+    must_be: '='
+    value: 0
+    name: occurred_at_no_missing_values
+  - type: missing_count
+    column: recorded_at
+    must_be: '='
+    value: 0
+    name: recorded_at_no_missing_values
+  - type: missing_count
+    column: metadata.causation_id
+    must_be: '='
+    value: 0
+    name: metadata.causation_id_no_missing_values
+  - type: missing_count
+    column: metadata.correlation_id
+    must_be: '='
+    value: 0
+    name: metadata.correlation_id_no_missing_values
+  - type: missing_count
+    column: metadata.user_id
+    must_be: '='
+    value: 0
+    name: metadata.user_id_no_missing_values
+  - type: missing_count
+    column: metadata.source_service
+    must_be: '='
+    value: 0
+    name: metadata.source_service_no_missing_values
+lineage:
+  downstream: []

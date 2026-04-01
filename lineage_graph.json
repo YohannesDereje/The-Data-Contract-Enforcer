@@ -1,0 +1,650 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "kind": "module",
+      "path": ".github/workflows/cd_prod.yml",
+      "language": "yml",
+      "id": ".github/workflows/cd_prod.yml"
+    },
+    {
+      "kind": "module",
+      "path": ".github/workflows/cd_staging.yml",
+      "language": "yml",
+      "id": ".github/workflows/cd_staging.yml"
+    },
+    {
+      "kind": "module",
+      "path": ".github/workflows/ci.yml",
+      "language": "yml",
+      "id": ".github/workflows/ci.yml"
+    },
+    {
+      "kind": "module",
+      "path": ".pre-commit-config.yaml",
+      "language": "yaml",
+      "id": ".pre-commit-config.yaml"
+    },
+    {
+      "kind": "module",
+      "path": "Taskfile.yml",
+      "language": "yml",
+      "id": "Taskfile.yml"
+    },
+    {
+      "kind": "module",
+      "path": "dbt_project.yml",
+      "language": "yml",
+      "id": "dbt_project.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/customers.yml",
+      "language": "yml",
+      "id": "models/marts/customers.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/locations.yml",
+      "language": "yml",
+      "id": "models/marts/locations.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/order_items.yml",
+      "language": "yml",
+      "id": "models/marts/order_items.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/orders.yml",
+      "language": "yml",
+      "id": "models/marts/orders.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/products.yml",
+      "language": "yml",
+      "id": "models/marts/products.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/supplies.yml",
+      "language": "yml",
+      "id": "models/marts/supplies.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/__sources.yml",
+      "language": "yml",
+      "id": "models/staging/__sources.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_customers.yml",
+      "language": "yml",
+      "id": "models/staging/stg_customers.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_locations.yml",
+      "language": "yml",
+      "id": "models/staging/stg_locations.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_order_items.yml",
+      "language": "yml",
+      "id": "models/staging/stg_order_items.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_orders.yml",
+      "language": "yml",
+      "id": "models/staging/stg_orders.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_products.yml",
+      "language": "yml",
+      "id": "models/staging/stg_products.yml"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_supplies.yml",
+      "language": "yml",
+      "id": "models/staging/stg_supplies.yml"
+    },
+    {
+      "kind": "module",
+      "path": "package-lock.yml",
+      "language": "yml",
+      "id": "package-lock.yml"
+    },
+    {
+      "kind": "module",
+      "path": "packages.yml",
+      "language": "yml",
+      "id": "packages.yml"
+    },
+    {
+      "kind": "module",
+      "path": "macros/cents_to_dollars.sql",
+      "language": "sql",
+      "id": "macros/cents_to_dollars.sql"
+    },
+    {
+      "kind": "module",
+      "path": "macros/generate_schema_name.sql",
+      "language": "sql",
+      "id": "macros/generate_schema_name.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/customers.sql",
+      "language": "sql",
+      "id": "models/marts/customers.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_customers.sql",
+      "language": "sql",
+      "id": "models/staging/stg_customers.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/orders.sql",
+      "language": "sql",
+      "id": "models/marts/orders.sql"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "joined",
+      "raw_uri": "joined",
+      "id": "uri::joined"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "customer_orders_summary",
+      "raw_uri": "customer_orders_summary",
+      "id": "uri::customer_orders_summary"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/locations.sql",
+      "language": "sql",
+      "id": "models/marts/locations.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_locations.sql",
+      "language": "sql",
+      "id": "models/staging/stg_locations.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/metricflow_time_spine.sql",
+      "language": "sql",
+      "id": "models/marts/metricflow_time_spine.sql"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "cast_to_date",
+      "raw_uri": "cast_to_date",
+      "id": "uri::cast_to_date"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "days",
+      "raw_uri": "days",
+      "id": "uri::days"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/order_items.sql",
+      "language": "sql",
+      "id": "models/marts/order_items.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_order_items.sql",
+      "language": "sql",
+      "id": "models/staging/stg_order_items.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_orders.sql",
+      "language": "sql",
+      "id": "models/staging/stg_orders.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_products.sql",
+      "language": "sql",
+      "id": "models/staging/stg_products.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/staging/stg_supplies.sql",
+      "language": "sql",
+      "id": "models/staging/stg_supplies.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/supplies.sql",
+      "language": "sql",
+      "id": "models/marts/supplies.sql"
+    },
+    {
+      "kind": "module",
+      "path": "models/marts/products.sql",
+      "language": "sql",
+      "id": "models/marts/products.sql"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "order_supplies_summary",
+      "raw_uri": "order_supplies_summary",
+      "id": "uri::order_supplies_summary"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "customer_order_count",
+      "raw_uri": "customer_order_count",
+      "id": "uri::customer_order_count"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "order_items_summary",
+      "raw_uri": "order_items_summary",
+      "id": "uri::order_items_summary"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "compute_booleans",
+      "raw_uri": "compute_booleans",
+      "id": "uri::compute_booleans"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "ecom.raw_customers",
+      "raw_uri": "ecom.raw_customers",
+      "id": "uri::ecom.raw_customers"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "renamed",
+      "raw_uri": "renamed",
+      "id": "uri::renamed"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "source",
+      "raw_uri": "source",
+      "id": "uri::source"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "ecom.raw_stores",
+      "raw_uri": "ecom.raw_stores",
+      "id": "uri::ecom.raw_stores"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "ecom.raw_items",
+      "raw_uri": "ecom.raw_items",
+      "id": "uri::ecom.raw_items"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "ecom.raw_orders",
+      "raw_uri": "ecom.raw_orders",
+      "id": "uri::ecom.raw_orders"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "ecom.raw_products",
+      "raw_uri": "ecom.raw_products",
+      "id": "uri::ecom.raw_products"
+    },
+    {
+      "kind": "external",
+      "canonical_uri": "ecom.raw_supplies",
+      "raw_uri": "ecom.raw_supplies",
+      "id": "uri::ecom.raw_supplies"
+    },
+    {
+      "kind": "module",
+      "path": ".github/workflows/scripts/dbt_cloud_run_job.py",
+      "language": "python",
+      "id": ".github/workflows/scripts/dbt_cloud_run_job.py"
+    },
+    {
+      "kind": "module",
+      "path": "seeds/jaffle-data/raw_customers.csv",
+      "language": "csv",
+      "id": "seeds/jaffle-data/raw_customers.csv"
+    },
+    {
+      "kind": "module",
+      "path": "seeds/jaffle-data/raw_items.csv",
+      "language": "csv",
+      "id": "seeds/jaffle-data/raw_items.csv"
+    },
+    {
+      "kind": "module",
+      "path": "seeds/jaffle-data/raw_orders.csv",
+      "language": "csv",
+      "id": "seeds/jaffle-data/raw_orders.csv"
+    },
+    {
+      "kind": "module",
+      "path": "seeds/jaffle-data/raw_products.csv",
+      "language": "csv",
+      "id": "seeds/jaffle-data/raw_products.csv"
+    },
+    {
+      "kind": "module",
+      "path": "seeds/jaffle-data/raw_stores.csv",
+      "language": "csv",
+      "id": "seeds/jaffle-data/raw_stores.csv"
+    },
+    {
+      "kind": "module",
+      "path": "seeds/jaffle-data/raw_supplies.csv",
+      "language": "csv",
+      "id": "seeds/jaffle-data/raw_supplies.csv"
+    }
+  ],
+  "edges": [
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/customers.sql",
+      "source": "models/staging/stg_customers.sql",
+      "target": "models/marts/customers.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/customers.sql",
+      "source": "models/marts/orders.sql",
+      "target": "models/marts/customers.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "models/marts/orders.sql",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/customers.sql",
+      "source": "uri::joined",
+      "target": "models/marts/customers.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "uri::joined",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/customers.sql",
+      "source": "uri::customer_orders_summary",
+      "target": "models/marts/customers.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/locations.sql",
+      "source": "models/staging/stg_locations.sql",
+      "target": "models/marts/locations.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/metricflow_time_spine.sql",
+      "source": "uri::cast_to_date",
+      "target": "models/marts/metricflow_time_spine.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/metricflow_time_spine.sql",
+      "source": "uri::days",
+      "target": "models/marts/metricflow_time_spine.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/orders.sql",
+      "source": "models/marts/order_items.sql",
+      "target": "models/marts/orders.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "models/staging/stg_order_items.sql",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "models/staging/stg_orders.sql",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/orders.sql",
+      "source": "models/staging/stg_orders.sql",
+      "target": "models/marts/orders.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "models/staging/stg_products.sql",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/products.sql",
+      "source": "models/staging/stg_products.sql",
+      "target": "models/marts/products.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "models/staging/stg_supplies.sql",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/supplies.sql",
+      "source": "models/staging/stg_supplies.sql",
+      "target": "models/marts/supplies.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "models/marts/supplies.sql",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "models/marts/products.sql",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/order_items.sql",
+      "source": "uri::order_supplies_summary",
+      "target": "models/marts/order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/orders.sql",
+      "source": "uri::customer_order_count",
+      "target": "models/marts/orders.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/orders.sql",
+      "source": "uri::order_items_summary",
+      "target": "models/marts/orders.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/marts/orders.sql",
+      "source": "uri::compute_booleans",
+      "target": "models/marts/orders.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_customers.sql",
+      "source": "uri::ecom.raw_customers",
+      "target": "models/staging/stg_customers.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_customers.sql",
+      "source": "uri::renamed",
+      "target": "models/staging/stg_customers.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_locations.sql",
+      "source": "uri::renamed",
+      "target": "models/staging/stg_locations.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_order_items.sql",
+      "source": "uri::renamed",
+      "target": "models/staging/stg_order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_orders.sql",
+      "source": "uri::renamed",
+      "target": "models/staging/stg_orders.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_products.sql",
+      "source": "uri::renamed",
+      "target": "models/staging/stg_products.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_supplies.sql",
+      "source": "uri::renamed",
+      "target": "models/staging/stg_supplies.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_customers.sql",
+      "source": "uri::source",
+      "target": "models/staging/stg_customers.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_locations.sql",
+      "source": "uri::source",
+      "target": "models/staging/stg_locations.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_order_items.sql",
+      "source": "uri::source",
+      "target": "models/staging/stg_order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_orders.sql",
+      "source": "uri::source",
+      "target": "models/staging/stg_orders.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_products.sql",
+      "source": "uri::source",
+      "target": "models/staging/stg_products.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_supplies.sql",
+      "source": "uri::source",
+      "target": "models/staging/stg_supplies.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_locations.sql",
+      "source": "uri::ecom.raw_stores",
+      "target": "models/staging/stg_locations.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_order_items.sql",
+      "source": "uri::ecom.raw_items",
+      "target": "models/staging/stg_order_items.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_orders.sql",
+      "source": "uri::ecom.raw_orders",
+      "target": "models/staging/stg_orders.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_products.sql",
+      "source": "uri::ecom.raw_products",
+      "target": "models/staging/stg_products.sql"
+    },
+    {
+      "operation_type": "TRANSFORM",
+      "is_dynamic": false,
+      "emitter": "models/staging/stg_supplies.sql",
+      "source": "uri::ecom.raw_supplies",
+      "target": "models/staging/stg_supplies.sql"
+    }
+  ]
+}

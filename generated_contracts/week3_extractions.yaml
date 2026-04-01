@@ -1,0 +1,487 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: week3-contract-v1
+info:
+  title: Week3 Data Contract
+  version: 1.0.0
+  owner: data-engineering
+  description: Auto-generated data contract for the week3 system, produced by the
+    Data Contract Enforcer pipeline.
+servers:
+  local:
+    type: local
+    path: outputs/week3/extractions.jsonl
+    format: jsonl
+terms:
+  usage: Internal analytics and downstream contract validation only.
+  limitations: Not for use in production serving without manual review.
+schema:
+  record_id:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''record_id'' of type string. Warning: 100.0% of values are
+      missing.'
+  doc_id:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''doc_id'' of type string. Warning: 100.0% of values are missing.'
+  confidence_score:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''confidence_score'' of type number. Warning: 2.5% of values
+      are missing.'
+  llm_trace_id:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''llm_trace_id'' of type string. Warning: 100.0% of values
+      are missing.'
+  file_name:
+    type: string
+    required: true
+    unique: false
+    description: Field 'file_name' of type string.
+  strategy_selected:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''strategy_selected'' of type string. Warning: 3.7% of values
+      are missing.'
+  processing_time_ms:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''processing_time_ms'' of type number. Warning: 54.7% of values
+      are missing.'
+  estimated_cost_usd:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''estimated_cost_usd'' of type number. Warning: 55.8% of values
+      are missing.'
+  page_number:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''page_number'' of type number. Warning: 6.5% of values are
+      missing.'
+  origin_type:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''origin_type'' of type string. Warning: 61.0% of values are
+      missing.'
+  attempt_chain:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''attempt_chain'' of type string. Warning: 62.3% of values
+      are missing.'
+  escalation_path:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''escalation_path'' of type string. Warning: 62.3% of values
+      are missing.'
+  final_success_cost_usd:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''final_success_cost_usd'' of type number. Warning: 63.4%
+      of values are missing.'
+  final_vlm_cost_usd:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''final_vlm_cost_usd'' of type number. Warning: 63.4% of values
+      are missing.'
+  event_type:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''event_type'' of type string. Warning: 44.2% of values are
+      missing.'
+  started_at:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''started_at'' of type string. Warning: 95.2% of values are
+      missing.'
+  total_pages_target:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''total_pages_target'' of type number. Warning: 97.5% of values
+      are missing.'
+  reasoning:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''reasoning'' of type string. Warning: 70.1% of values are
+      missing.'
+  logged_at:
+    type: string
+    required: false
+    unique: true
+    description: 'Field ''logged_at'' of type string. Warning: 70.1% of values are
+      missing.'
+  ended_at:
+    type: string
+    required: false
+    unique: true
+    description: 'Field ''ended_at'' of type string. Warning: 97.7% of values are
+      missing.'
+  total_pages_processed:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''total_pages_processed'' of type number. Warning: 76.6% of
+      values are missing.'
+  overall_origin:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''overall_origin'' of type string. Warning: 98.8% of values
+      are missing.'
+  layout_complexity:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''layout_complexity'' of type string. Warning: 98.8% of values
+      are missing.'
+  mixed_mode:
+    type: boolean
+    required: false
+    unique: false
+    description: 'Field ''mixed_mode'' of type boolean. Warning: 98.8% of values are
+      missing.'
+  form_fillable:
+    type: boolean
+    required: false
+    unique: false
+    description: 'Field ''form_fillable'' of type boolean. Warning: 98.8% of values
+      are missing.'
+  domain_hint:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''domain_hint'' of type string. Warning: 98.8% of values are
+      missing.'
+  cost_tier:
+    type: string
+    required: false
+    unique: false
+    description: 'Field ''cost_tier'' of type string. Warning: 98.8% of values are
+      missing.'
+  cost_estimate:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''cost_estimate'' of type number. Warning: 76.6% of values
+      are missing.'
+  token_count:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''token_count'' of type number. Warning: 77.8% of values are
+      missing.'
+  processed_at:
+    type: string
+    required: false
+    unique: true
+    description: 'Field ''processed_at'' of type string. Warning: 78.9% of values
+      are missing.'
+  source_total_pages:
+    type: number
+    required: false
+    unique: false
+    description: 'Field ''source_total_pages'' of type number. Warning: 97.7% of values
+      are missing.'
+quality:
+  type: SodaChecks
+  checks:
+  - type: missing_count
+    column: record_id
+    must_be: '='
+    value: 0
+    name: record_id_no_missing_values
+  - type: missing_count
+    column: doc_id
+    must_be: '='
+    value: 0
+    name: doc_id_no_missing_values
+  - type: missing_count
+    column: confidence_score
+    must_be: '='
+    value: 0
+    name: confidence_score_no_missing_values
+  - type: min
+    column: confidence_score
+    must_be: '>='
+    value: 0.0
+    name: confidence_score_min_value
+  - type: max
+    column: confidence_score
+    must_be: <=
+    value: 1.0
+    name: confidence_score_max_value
+  - type: missing_count
+    column: llm_trace_id
+    must_be: '='
+    value: 0
+    name: llm_trace_id_no_missing_values
+  - type: missing_count
+    column: file_name
+    must_be: '='
+    value: 0
+    name: file_name_no_missing_values
+  - type: missing_count
+    column: strategy_selected
+    must_be: '='
+    value: 0
+    name: strategy_selected_no_missing_values
+  - type: missing_count
+    column: processing_time_ms
+    must_be: '='
+    value: 0
+    name: processing_time_ms_no_missing_values
+  - type: min
+    column: processing_time_ms
+    must_be: '>='
+    value: 0.404
+    name: processing_time_ms_min_value
+  - type: max
+    column: processing_time_ms
+    must_be: <=
+    value: 2765146.358
+    name: processing_time_ms_max_value
+  - type: missing_count
+    column: estimated_cost_usd
+    must_be: '='
+    value: 0
+    name: estimated_cost_usd_no_missing_values
+  - type: min
+    column: estimated_cost_usd
+    must_be: '>='
+    value: 0.0
+    name: estimated_cost_usd_min_value
+  - type: max
+    column: estimated_cost_usd
+    must_be: <=
+    value: 1.9000279999999998
+    name: estimated_cost_usd_max_value
+  - type: missing_count
+    column: page_number
+    must_be: '='
+    value: 0
+    name: page_number_no_missing_values
+  - type: min
+    column: page_number
+    must_be: '>='
+    value: 0.0
+    name: page_number_min_value
+  - type: max
+    column: page_number
+    must_be: <=
+    value: 110.0
+    name: page_number_max_value
+  - type: missing_count
+    column: origin_type
+    must_be: '='
+    value: 0
+    name: origin_type_no_missing_values
+  - type: missing_count
+    column: attempt_chain
+    must_be: '='
+    value: 0
+    name: attempt_chain_no_missing_values
+  - type: missing_count
+    column: escalation_path
+    must_be: '='
+    value: 0
+    name: escalation_path_no_missing_values
+  - type: missing_count
+    column: final_success_cost_usd
+    must_be: '='
+    value: 0
+    name: final_success_cost_usd_no_missing_values
+  - type: min
+    column: final_success_cost_usd
+    must_be: '>='
+    value: 0.0
+    name: final_success_cost_usd_min_value
+  - type: max
+    column: final_success_cost_usd
+    must_be: <=
+    value: 0.294711
+    name: final_success_cost_usd_max_value
+  - type: missing_count
+    column: final_vlm_cost_usd
+    must_be: '='
+    value: 0
+    name: final_vlm_cost_usd_no_missing_values
+  - type: min
+    column: final_vlm_cost_usd
+    must_be: '>='
+    value: 0.0
+    name: final_vlm_cost_usd_min_value
+  - type: max
+    column: final_vlm_cost_usd
+    must_be: <=
+    value: 0.294711
+    name: final_vlm_cost_usd_max_value
+  - type: missing_count
+    column: event_type
+    must_be: '='
+    value: 0
+    name: event_type_no_missing_values
+  - type: missing_count
+    column: started_at
+    must_be: '='
+    value: 0
+    name: started_at_no_missing_values
+  - type: missing_count
+    column: total_pages_target
+    must_be: '='
+    value: 0
+    name: total_pages_target_no_missing_values
+  - type: min
+    column: total_pages_target
+    must_be: '>='
+    value: 1.0
+    name: total_pages_target_min_value
+  - type: max
+    column: total_pages_target
+    must_be: <=
+    value: 110.0
+    name: total_pages_target_max_value
+  - type: missing_count
+    column: reasoning
+    must_be: '='
+    value: 0
+    name: reasoning_no_missing_values
+  - type: missing_count
+    column: logged_at
+    must_be: '='
+    value: 0
+    name: logged_at_no_missing_values
+  - type: duplicate_count
+    column: logged_at
+    must_be: '='
+    value: 0
+    name: logged_at_no_duplicates
+  - type: missing_count
+    column: ended_at
+    must_be: '='
+    value: 0
+    name: ended_at_no_missing_values
+  - type: duplicate_count
+    column: ended_at
+    must_be: '='
+    value: 0
+    name: ended_at_no_duplicates
+  - type: missing_count
+    column: total_pages_processed
+    must_be: '='
+    value: 0
+    name: total_pages_processed_no_missing_values
+  - type: min
+    column: total_pages_processed
+    must_be: '>='
+    value: 1.0
+    name: total_pages_processed_min_value
+  - type: max
+    column: total_pages_processed
+    must_be: <=
+    value: 110.0
+    name: total_pages_processed_max_value
+  - type: missing_count
+    column: overall_origin
+    must_be: '='
+    value: 0
+    name: overall_origin_no_missing_values
+  - type: missing_count
+    column: layout_complexity
+    must_be: '='
+    value: 0
+    name: layout_complexity_no_missing_values
+  - type: missing_count
+    column: mixed_mode
+    must_be: '='
+    value: 0
+    name: mixed_mode_no_missing_values
+  - type: missing_count
+    column: form_fillable
+    must_be: '='
+    value: 0
+    name: form_fillable_no_missing_values
+  - type: missing_count
+    column: domain_hint
+    must_be: '='
+    value: 0
+    name: domain_hint_no_missing_values
+  - type: missing_count
+    column: cost_tier
+    must_be: '='
+    value: 0
+    name: cost_tier_no_missing_values
+  - type: missing_count
+    column: cost_estimate
+    must_be: '='
+    value: 0
+    name: cost_estimate_no_missing_values
+  - type: min
+    column: cost_estimate
+    must_be: '>='
+    value: 0.0
+    name: cost_estimate_min_value
+  - type: max
+    column: cost_estimate
+    must_be: <=
+    value: 0.050037
+    name: cost_estimate_max_value
+  - type: missing_count
+    column: token_count
+    must_be: '='
+    value: 0
+    name: token_count_no_missing_values
+  - type: min
+    column: token_count
+    must_be: '>='
+    value: 0.0
+    name: token_count_min_value
+  - type: max
+    column: token_count
+    must_be: <=
+    value: 22916.0
+    name: token_count_max_value
+  - type: missing_count
+    column: processed_at
+    must_be: '='
+    value: 0
+    name: processed_at_no_missing_values
+  - type: duplicate_count
+    column: processed_at
+    must_be: '='
+    value: 0
+    name: processed_at_no_duplicates
+  - type: missing_count
+    column: source_total_pages
+    must_be: '='
+    value: 0
+    name: source_total_pages_no_missing_values
+  - type: min
+    column: source_total_pages
+    must_be: '>='
+    value: 7.0
+    name: source_total_pages_min_value
+  - type: max
+    column: source_total_pages
+    must_be: <=
+    value: 161.0
+    name: source_total_pages_max_value
+lineage:
+  downstream: []

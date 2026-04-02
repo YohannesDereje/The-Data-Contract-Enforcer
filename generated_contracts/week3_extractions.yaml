@@ -33,6 +33,8 @@ schema:
     unique: false
     description: 'Field ''confidence_score'' of type number. Warning: 2.5% of values
       are missing.'
+    minimum: 0.0
+    maximum: 1.0
   llm_trace_id:
     type: string
     required: false
@@ -50,30 +52,44 @@ schema:
     unique: false
     description: 'Field ''strategy_selected'' of type string. Warning: 3.7% of values
       are missing.'
+    enum:
+    - STRATEGY_A
+    - STRATEGY_C
+    - STRATEGY_B
   processing_time_ms:
     type: number
     required: false
     unique: false
     description: 'Field ''processing_time_ms'' of type number. Warning: 54.7% of values
       are missing.'
+    minimum: 0.404
+    maximum: 2765146.358
   estimated_cost_usd:
     type: number
     required: false
     unique: false
     description: 'Field ''estimated_cost_usd'' of type number. Warning: 55.8% of values
       are missing.'
+    minimum: 0.0
+    maximum: 1.9000279999999998
   page_number:
     type: number
     required: false
     unique: false
     description: 'Field ''page_number'' of type number. Warning: 6.5% of values are
       missing.'
+    minimum: 0.0
+    maximum: 110.0
   origin_type:
     type: string
     required: false
     unique: false
     description: 'Field ''origin_type'' of type string. Warning: 61.0% of values are
       missing.'
+    enum:
+    - hybrid
+    - born_digital
+    - scanned_image
   attempt_chain:
     type: string
     required: false
@@ -92,18 +108,29 @@ schema:
     unique: false
     description: 'Field ''final_success_cost_usd'' of type number. Warning: 63.4%
       of values are missing.'
+    minimum: 0.0
+    maximum: 0.294711
   final_vlm_cost_usd:
     type: number
     required: false
     unique: false
     description: 'Field ''final_vlm_cost_usd'' of type number. Warning: 63.4% of values
       are missing.'
+    minimum: 0.0
+    maximum: 0.294711
   event_type:
     type: string
     required: false
     unique: false
     description: 'Field ''event_type'' of type string. Warning: 44.2% of values are
       missing.'
+    enum:
+    - triage_decision
+    - extraction_page_metrics
+    - triage_start
+    - triage_summary
+    - extraction_start
+    - extraction_summary
   started_at:
     type: string
     required: false
@@ -116,12 +143,19 @@ schema:
     unique: false
     description: 'Field ''total_pages_target'' of type number. Warning: 97.5% of values
       are missing.'
+    minimum: 1.0
+    maximum: 110.0
   reasoning:
     type: string
     required: false
     unique: false
     description: 'Field ''reasoning'' of type string. Warning: 70.1% of values are
       missing.'
+    enum:
+    - Sufficient text density for fast digital extraction.
+    - No searchable text layer; use OCR/VLM pipeline.
+    - High rect count indicates table/layout-heavy content.
+    - No explicit rule matched; defaulting to OCR/Vision routing.
   logged_at:
     type: string
     required: false
@@ -140,18 +174,27 @@ schema:
     unique: false
     description: 'Field ''total_pages_processed'' of type number. Warning: 76.6% of
       values are missing.'
+    minimum: 1.0
+    maximum: 110.0
   overall_origin:
     type: string
     required: false
     unique: false
     description: 'Field ''overall_origin'' of type string. Warning: 98.8% of values
       are missing.'
+    enum:
+    - born_digital
+    - scanned
   layout_complexity:
     type: string
     required: false
     unique: false
     description: 'Field ''layout_complexity'' of type string. Warning: 98.8% of values
       are missing.'
+    enum:
+    - Low
+    - Medium
+    - High
   mixed_mode:
     type: boolean
     required: false
@@ -170,24 +213,35 @@ schema:
     unique: false
     description: 'Field ''domain_hint'' of type string. Warning: 98.8% of values are
       missing.'
+    enum:
+    - Banking/Security
+    - General
+    - Public_Sector
   cost_tier:
     type: string
     required: false
     unique: false
     description: 'Field ''cost_tier'' of type string. Warning: 98.8% of values are
       missing.'
+    enum:
+    - HIGH
+    - MEDIUM
   cost_estimate:
     type: number
     required: false
     unique: false
     description: 'Field ''cost_estimate'' of type number. Warning: 76.6% of values
       are missing.'
+    minimum: 0.0
+    maximum: 0.050037
   token_count:
     type: number
     required: false
     unique: false
     description: 'Field ''token_count'' of type number. Warning: 77.8% of values are
       missing.'
+    minimum: 0.0
+    maximum: 22916.0
   processed_at:
     type: string
     required: false
@@ -200,6 +254,8 @@ schema:
     unique: false
     description: 'Field ''source_total_pages'' of type number. Warning: 97.7% of values
       are missing.'
+    minimum: 7.0
+    maximum: 161.0
 quality:
   type: SodaChecks
   checks:

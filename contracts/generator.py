@@ -109,6 +109,11 @@ def extract_profiling_metadata(df: pd.DataFrame) -> dict[str, Any]:
             "is_unique": column_info.get("is_unique"),
         }
 
+        col_meta["n_distinct"] = column_info.get("n_distinct")
+        col_meta["distinct"] = list(
+            column_info.get("value_counts_without_nan", {}).keys()
+        )
+
         if column_info.get("type") == "Numeric":
             try:
                 col_meta["mean"] = column_info["mean"]
@@ -235,6 +240,8 @@ def create_bitol_contract(
         profiler_type = column_meta.get("type")
         p_missing = column_meta.get("p_missing") or 0.0
         is_unique = column_meta.get("is_unique") or False
+        n_distinct = column_meta.get("n_distinct") or 0
+        distinct_values = column_meta.get("distinct") or []
 
         bitol_type = _PROFILER_TO_BITOL.get(profiler_type, "string")
 
@@ -242,12 +249,46 @@ def create_bitol_contract(
         if p_missing > 0.0:
             description += f" Warning: {p_missing:.1%} of values are missing."
 
-        contract["schema"][column_name] = {
+        field_schema: dict[str, Any] = {
             "type": bitol_type,
             "required": p_missing == 0.0,
             "unique": bool(is_unique),
             "description": description,
         }
+
+        # Pattern inference for Text columns based on column name semantics.
+        if profiler_type == "Text":
+            col_lower = column_name.lower()
+            if "uuid" in col_lower or (
+                "id" in col_lower and "valid" not in col_lower
+            ):
+                field_schema["pattern"] = (
+                    r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}"
+                    r"-[0-9a-f]{4}-[0-9a-f]{12}$"
+                )
+            elif "email" in col_lower:
+                field_schema["pattern"] = r"^[^@]+@[^@]+\.[^@]+$"
+
+            # Enum inference for low-cardinality, non-unique Text columns.
+            if n_distinct > 0 and n_distinct < 10 and not is_unique and distinct_values:
+                field_schema["enum"] = [
+                    str(v) for v in distinct_values if v is not None
+                ]
+
+        # Min/max bounds for Numeric columns.
+        if profiler_type == "Numeric":
+            if column_name == "confidence_score":
+                field_schema["minimum"] = 0.0
+                field_schema["maximum"] = 1.0
+            else:
+                col_min = column_meta.get("min")
+                col_max = column_meta.get("max")
+                if col_min is not None:
+                    field_schema["minimum"] = col_min
+                if col_max is not None:
+                    field_schema["maximum"] = col_max
+
+        contract["schema"][column_name] = field_schema
 
     # ------------------------------------------------------------------ quality
     checks: list[dict[str, Any]] = []
@@ -307,6 +348,84 @@ def create_bitol_contract(
     }
 
     return contract
+
+
+def create_dbt_schema_yml(
+    system_name: str,
+    profiling_metadata: dict[str, Any],
+) -> dict[str, Any]:
+    """Build a dbt-compatible schema.yml dictionary from profiling metadata.
+
+    Maps contract constraints to native dbt tests:
+    - required (p_missing == 0) -> 'not_null'
+    - unique                    -> 'unique'
+    - low-cardinality Text      -> 'accepted_values'
+
+    Args:
+        system_name: Used to name the dbt model (e.g. 'week3').
+        profiling_metadata: Output of extract_profiling_metadata.
+
+    Returns:
+        A dictionary ready to be serialized as a dbt schema.yml file.
+    """
+    columns: list[dict[str, Any]] = []
+
+    for column_name, column_meta in profiling_metadata.items():
+        profiler_type = column_meta.get("type")
+        p_missing = column_meta.get("p_missing") or 0.0
+        is_unique = column_meta.get("is_unique") or False
+        n_distinct = column_meta.get("n_distinct") or 0
+        distinct_values = column_meta.get("distinct") or []
+
+        tests: list[Any] = []
+
+        if p_missing == 0.0:
+            tests.append("not_null")
+
+        if is_unique:
+            tests.append("unique")
+
+        # Low-cardinality, non-unique Text columns get an accepted_values test.
+        if (
+            profiler_type == "Text"
+            and 0 < n_distinct < 10
+            and not is_unique
+            and distinct_values
+        ):
+            enum_list = [str(v) for v in distinct_values if v is not None]
+            tests.append({"accepted_values": {"values": enum_list}})
+
+        columns.append({"name": column_name, "tests": tests})
+
+    return {
+        "version": 2,
+        "models": [
+            {
+                "name": f"{system_name}_extractions",
+                "columns": columns,
+            }
+        ],
+    }
+
+
+def save_dbt_schema_to_yaml(system_name: str, dbt_schema: dict[str, Any]) -> None:
+    """Serialize a dbt schema dictionary to a .yml file in generated_contracts/.
+
+    Args:
+        system_name: Used to derive the output filename (e.g. 'week3').
+        dbt_schema: The dbt schema dictionary produced by create_dbt_schema_yml.
+    """
+    output_dir = Path("generated_contracts")
+    output_dir.mkdir(exist_ok=True)
+
+    output_path = output_dir / f"{system_name}_extractions_dbt.yml"
+
+    native_schema = json.loads(json.dumps(dbt_schema, default=_json_serializer))
+
+    with output_path.open("w", encoding="utf-8") as fh:
+        yaml.dump(native_schema, fh, sort_keys=False, indent=2)
+
+    print(f"dbt schema saved to: {output_path}")
 
 
 def save_contract_to_yaml(system_name: str, contract: dict[str, Any]) -> None:
@@ -374,6 +493,9 @@ if __name__ == "__main__":
               f"{len(contract['quality']['checks'])} quality checks, "
               f"and {len(downstream)} downstream consumer(s).")
         save_contract_to_yaml(args.system_name, contract)
+        dbt_schema = create_dbt_schema_yml(args.system_name, metadata)
+        save_dbt_schema_to_yaml(args.system_name, dbt_schema)
+        print(f"dbt counterpart generated for '{args.system_name}'.")
     except (ValueError, FileNotFoundError) as exc:
         print(f"\nError: {exc}")
         raise SystemExit(1)

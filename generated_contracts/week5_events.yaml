@@ -21,6 +21,7 @@ schema:
     required: true
     unique: true
     description: Field 'event_id' of type string.
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
   event_type:
     type: string
     required: true
@@ -37,6 +38,8 @@ schema:
     required: true
     unique: false
     description: Field 'aggregate_type' of type string.
+    enum:
+    - LoanApplication
   sequence_number:
     type: string
     required: false
@@ -48,6 +51,8 @@ schema:
     required: true
     unique: false
     description: Field 'schema_version' of type string.
+    enum:
+    - '1.0'
   occurred_at:
     type: string
     required: false
@@ -77,11 +82,16 @@ schema:
     required: true
     unique: false
     description: Field 'metadata.user_id' of type string.
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    enum:
+    - system
   metadata.source_service:
     type: string
     required: true
     unique: false
     description: Field 'metadata.source_service' of type string.
+    enum:
+    - database-export
 quality:
   type: SodaChecks
   checks:

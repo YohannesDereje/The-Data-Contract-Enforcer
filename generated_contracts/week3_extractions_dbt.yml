@@ -1,0 +1,112 @@
+version: 2
+models:
+- name: week3_extractions
+  columns:
+  - name: record_id
+    tests: []
+  - name: doc_id
+    tests: []
+  - name: confidence_score
+    tests: []
+  - name: llm_trace_id
+    tests: []
+  - name: file_name
+    tests:
+    - not_null
+  - name: strategy_selected
+    tests:
+    - accepted_values:
+        values:
+        - STRATEGY_A
+        - STRATEGY_C
+        - STRATEGY_B
+  - name: processing_time_ms
+    tests: []
+  - name: estimated_cost_usd
+    tests: []
+  - name: page_number
+    tests: []
+  - name: origin_type
+    tests:
+    - accepted_values:
+        values:
+        - hybrid
+        - born_digital
+        - scanned_image
+  - name: attempt_chain
+    tests: []
+  - name: escalation_path
+    tests: []
+  - name: final_success_cost_usd
+    tests: []
+  - name: final_vlm_cost_usd
+    tests: []
+  - name: event_type
+    tests:
+    - accepted_values:
+        values:
+        - triage_decision
+        - extraction_page_metrics
+        - triage_start
+        - triage_summary
+        - extraction_start
+        - extraction_summary
+  - name: started_at
+    tests: []
+  - name: total_pages_target
+    tests: []
+  - name: reasoning
+    tests:
+    - accepted_values:
+        values:
+        - Sufficient text density for fast digital extraction.
+        - No searchable text layer; use OCR/VLM pipeline.
+        - High rect count indicates table/layout-heavy content.
+        - No explicit rule matched; defaulting to OCR/Vision routing.
+  - name: logged_at
+    tests:
+    - unique
+  - name: ended_at
+    tests:
+    - unique
+  - name: total_pages_processed
+    tests: []
+  - name: overall_origin
+    tests:
+    - accepted_values:
+        values:
+        - born_digital
+        - scanned
+  - name: layout_complexity
+    tests:
+    - accepted_values:
+        values:
+        - Low
+        - Medium
+        - High
+  - name: mixed_mode
+    tests: []
+  - name: form_fillable
+    tests: []
+  - name: domain_hint
+    tests:
+    - accepted_values:
+        values:
+        - Banking/Security
+        - General
+        - Public_Sector
+  - name: cost_tier
+    tests:
+    - accepted_values:
+        values:
+        - HIGH
+        - MEDIUM
+  - name: cost_estimate
+    tests: []
+  - name: token_count
+    tests: []
+  - name: processed_at
+    tests:
+    - unique
+  - name: source_total_pages
+    tests: []

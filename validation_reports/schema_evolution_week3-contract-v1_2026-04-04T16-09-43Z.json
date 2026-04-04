@@ -1,0 +1,19 @@
+{
+  "report_id": "f78d9aea-09a0-4dc8-9efb-fecf302a20c3",
+  "contract_id": "week3-contract-v1",
+  "generated_at": "2026-04-04T16:09:43.417511+00:00",
+  "compatibility_verdict": "BREAKING",
+  "changes": [
+    {
+      "change_type": "Remove Field",
+      "field": "extraction_model",
+      "old_value": "string",
+      "new_value": null,
+      "compatibility": "No (BREAKING)"
+    }
+  ],
+  "migration_checklist": [
+    "Review breaking changes with downstream consumers."
+  ],
+  "rollback_plan": "Revert the schema to the previous version and redeploy producer services."
+}

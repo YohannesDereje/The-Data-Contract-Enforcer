@@ -1,5 +1,6 @@
 import argparse
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict
 import yaml
@@ -148,6 +149,26 @@ def save_dbt_schema_to_yaml(system_name: str, dbt_schema: dict[str, Any]) -> Non
     with output_path.open("w", encoding="utf-8") as fh: yaml.dump(json.loads(json.dumps(dbt_schema, default=_json_serializer)), fh, sort_keys=False, indent=2)
     print(f"dbt schema saved to: {output_path}")
 
+def save_schema_snapshot(contract_id: str, schema_dict: dict[str, Any]) -> None:
+    """Save a timestamped JSON snapshot of the contract schema.
+
+    Args:
+        contract_id: The contract identifier (e.g. 'week3-contract-v1').
+        schema_dict: The 'schema' value from the generated contract dictionary.
+    """
+    snapshots_dir = Path("schema_snapshots")
+    contract_dir = snapshots_dir / contract_id
+    contract_dir.mkdir(parents=True, exist_ok=True)
+
+    filename = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ") + ".json"
+    output_path = contract_dir / filename
+
+    with output_path.open("w", encoding="utf-8") as fh:
+        fh.write(json.dumps(schema_dict, indent=2, default=_json_serializer))
+
+    print(f"Schema snapshot saved to: {output_path}")
+
+
 # --- Main Execution ---
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Data Contract Generator")
@@ -171,6 +192,7 @@ if __name__ == "__main__":
         print(f"\nBuilding Bitol contract for '{args.system_name}'...")
         contract = create_bitol_contract(args.system_name, records[0], metadata, subscriptions)
         save_contract_to_yaml(args.system_name, contract)
+        save_schema_snapshot(contract["id"], contract["schema"])
         
         # --- RE-ADDED DBT GENERATION ---
         print(f"\nBuilding dbt schema for '{args.system_name}'...")

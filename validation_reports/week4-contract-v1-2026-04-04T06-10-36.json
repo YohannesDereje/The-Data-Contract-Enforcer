@@ -1,0 +1,133 @@
+{
+  "report_id": "f989986e-5767-4f28-a621-fe841c326e1e",
+  "contract_id": "week4-contract-v1",
+  "snapshot_id": "cb6a975f7d4b62a9d83a816e8ff6ceaf8a960fafdceb632c88b8eec35efda0b2",
+  "run_timestamp": "2026-04-04T06:10:36.756900+00:00",
+  "total_checks": 10,
+  "passed": 10,
+  "failed": 0,
+  "warned": 0,
+  "errored": 0,
+  "results": [
+    {
+      "check_id": "snapshot_id_no_missing_values",
+      "column_name": "snapshot_id",
+      "check_type": "missing_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "snapshot_id_no_duplicates",
+      "column_name": "snapshot_id",
+      "check_type": "duplicate_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "codebase_root_no_missing_values",
+      "column_name": "codebase_root",
+      "check_type": "missing_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "codebase_root_no_duplicates",
+      "column_name": "codebase_root",
+      "check_type": "duplicate_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "git_commit_no_missing_values",
+      "column_name": "git_commit",
+      "check_type": "missing_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "git_commit_no_duplicates",
+      "column_name": "git_commit",
+      "check_type": "duplicate_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "captured_at_no_missing_values",
+      "column_name": "captured_at",
+      "check_type": "missing_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "captured_at_no_duplicates",
+      "column_name": "captured_at",
+      "check_type": "duplicate_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "nodes_no_missing_values",
+      "column_name": "nodes",
+      "check_type": "missing_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    },
+    {
+      "check_id": "edges_no_missing_values",
+      "column_name": "edges",
+      "check_type": "missing_count",
+      "status": "PASS",
+      "actual_value": 0,
+      "expected": "= 0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Check passed. Actual value: 0."
+    }
+  ]
+}

@@ -77,7 +77,117 @@ schema:
       unique: true
 quality:
   type: SodaChecks
-  checks: []
+  checks:
+  - type: missing_count
+    column: fact_id
+    must_be: '='
+    value: 0
+    name: fact_id_no_missing_values
+  - type: duplicate_count
+    column: fact_id
+    must_be: '='
+    value: 0
+    name: fact_id_no_duplicates
+  - type: missing_count
+    column: text
+    must_be: '='
+    value: 0
+    name: text_no_missing_values
+  - type: missing_count
+    column: confidence
+    must_be: '='
+    value: 0
+    name: confidence_no_missing_values
+  - type: min
+    column: confidence
+    must_be: '>='
+    value: 0.0
+    name: confidence_min_value
+  - type: max
+    column: confidence
+    must_be: <=
+    value: 1.0
+    name: confidence_max_value
+  - type: missing_count
+    column: page_ref
+    must_be: '='
+    value: 0
+    name: page_ref_no_missing_values
+  - type: min
+    column: page_ref
+    must_be: '>='
+    value: 1
+    name: page_ref_min_value
+  - type: max
+    column: page_ref
+    must_be: <=
+    value: 50
+    name: page_ref_max_value
+  - type: missing_count
+    column: source_excerpt
+    must_be: '='
+    value: 0
+    name: source_excerpt_no_missing_values
+  - type: missing_count
+    column: entity_refs
+    must_be: '='
+    value: 0
+    name: entity_refs_no_missing_values
+  - type: missing_count
+    column: meta_doc_id
+    must_be: '='
+    value: 0
+    name: meta_doc_id_no_missing_values
+  - type: missing_count
+    column: meta_source_path
+    must_be: '='
+    value: 0
+    name: meta_source_path_no_missing_values
+  - type: missing_count
+    column: meta_extraction_model
+    must_be: '='
+    value: 0
+    name: meta_extraction_model_no_missing_values
+  - type: missing_count
+    column: meta_extracted_at
+    must_be: '='
+    value: 0
+    name: meta_extracted_at_no_missing_values
+  - type: duplicate_count
+    column: meta_extracted_at
+    must_be: '='
+    value: 0
+    name: meta_extracted_at_no_duplicates
+  - type: missing_count
+    column: meta_token_count.input
+    must_be: '='
+    value: 0
+    name: meta_token_count.input_no_missing_values
+  - type: min
+    column: meta_token_count.input
+    must_be: '>='
+    value: 512
+    name: meta_token_count.input_min_value
+  - type: max
+    column: meta_token_count.input
+    must_be: <=
+    value: 4096
+    name: meta_token_count.input_max_value
+  - type: missing_count
+    column: meta_token_count.output
+    must_be: '='
+    value: 0
+    name: meta_token_count.output_no_missing_values
+  - type: min
+    column: meta_token_count.output
+    must_be: '>='
+    value: 256
+    name: meta_token_count.output_min_value
+  - type: max
+    column: meta_token_count.output
+    must_be: <=
+    value: 1024
+    name: meta_token_count.output_max_value
 lineage:
   downstream:
   - contract_id: week3-contract-v1

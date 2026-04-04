@@ -119,6 +119,201 @@ schema:
               unique: false
 quality:
   type: SodaChecks
-  checks: []
+  checks:
+  - type: missing_count
+    column: verdict_id
+    must_be: '='
+    value: 0
+    name: verdict_id_no_missing_values
+  - type: duplicate_count
+    column: verdict_id
+    must_be: '='
+    value: 0
+    name: verdict_id_no_duplicates
+  - type: missing_count
+    column: target_ref
+    must_be: '='
+    value: 0
+    name: target_ref_no_missing_values
+  - type: missing_count
+    column: rubric_id
+    must_be: '='
+    value: 0
+    name: rubric_id_no_missing_values
+  - type: missing_count
+    column: rubric_version
+    must_be: '='
+    value: 0
+    name: rubric_version_no_missing_values
+  - type: missing_count
+    column: evaluated_at
+    must_be: '='
+    value: 0
+    name: evaluated_at_no_missing_values
+  - type: duplicate_count
+    column: evaluated_at
+    must_be: '='
+    value: 0
+    name: evaluated_at_no_duplicates
+  - type: missing_count
+    column: confidence
+    must_be: '='
+    value: 0
+    name: confidence_no_missing_values
+  - type: min
+    column: confidence
+    must_be: '>='
+    value: 0.0
+    name: confidence_min_value
+  - type: max
+    column: confidence
+    must_be: <=
+    value: 1.0
+    name: confidence_max_value
+  - type: missing_count
+    column: overall_score
+    must_be: '='
+    value: 0
+    name: overall_score_no_missing_values
+  - type: min
+    column: overall_score
+    must_be: '>='
+    value: 3.013
+    name: overall_score_min_value
+  - type: max
+    column: overall_score
+    must_be: <=
+    value: 4.878
+    name: overall_score_max_value
+  - type: missing_count
+    column: overall_verdict
+    must_be: '='
+    value: 0
+    name: overall_verdict_no_missing_values
+  - type: missing_count
+    column: scores.Correctness.score
+    must_be: '='
+    value: 0
+    name: scores.Correctness.score_no_missing_values
+  - type: min
+    column: scores.Correctness.score
+    must_be: '>='
+    value: 3.0
+    name: scores.Correctness.score_min_value
+  - type: max
+    column: scores.Correctness.score
+    must_be: <=
+    value: 5.0
+    name: scores.Correctness.score_max_value
+  - type: missing_count
+    column: scores.Correctness.evidence
+    must_be: '='
+    value: 0
+    name: scores.Correctness.evidence_no_missing_values
+  - type: missing_count
+    column: scores.Correctness.notes
+    must_be: '='
+    value: 0
+    name: scores.Correctness.notes_no_missing_values
+  - type: missing_count
+    column: scores.Security.score
+    must_be: '='
+    value: 0
+    name: scores.Security.score_no_missing_values
+  - type: min
+    column: scores.Security.score
+    must_be: '>='
+    value: 3.0
+    name: scores.Security.score_min_value
+  - type: max
+    column: scores.Security.score
+    must_be: <=
+    value: 5.0
+    name: scores.Security.score_max_value
+  - type: missing_count
+    column: scores.Security.evidence
+    must_be: '='
+    value: 0
+    name: scores.Security.evidence_no_missing_values
+  - type: missing_count
+    column: scores.Security.notes
+    must_be: '='
+    value: 0
+    name: scores.Security.notes_no_missing_values
+  - type: missing_count
+    column: scores.Readability.score
+    must_be: '='
+    value: 0
+    name: scores.Readability.score_no_missing_values
+  - type: min
+    column: scores.Readability.score
+    must_be: '>='
+    value: 3.0
+    name: scores.Readability.score_min_value
+  - type: max
+    column: scores.Readability.score
+    must_be: <=
+    value: 5.0
+    name: scores.Readability.score_max_value
+  - type: missing_count
+    column: scores.Readability.evidence
+    must_be: '='
+    value: 0
+    name: scores.Readability.evidence_no_missing_values
+  - type: missing_count
+    column: scores.Readability.notes
+    must_be: '='
+    value: 0
+    name: scores.Readability.notes_no_missing_values
+  - type: missing_count
+    column: scores.Testability.score
+    must_be: '='
+    value: 0
+    name: scores.Testability.score_no_missing_values
+  - type: min
+    column: scores.Testability.score
+    must_be: '>='
+    value: 3.0
+    name: scores.Testability.score_min_value
+  - type: max
+    column: scores.Testability.score
+    must_be: <=
+    value: 5.0
+    name: scores.Testability.score_max_value
+  - type: missing_count
+    column: scores.Testability.evidence
+    must_be: '='
+    value: 0
+    name: scores.Testability.evidence_no_missing_values
+  - type: missing_count
+    column: scores.Testability.notes
+    must_be: '='
+    value: 0
+    name: scores.Testability.notes_no_missing_values
+  - type: missing_count
+    column: scores.Maintainability.score
+    must_be: '='
+    value: 0
+    name: scores.Maintainability.score_no_missing_values
+  - type: min
+    column: scores.Maintainability.score
+    must_be: '>='
+    value: 3.0
+    name: scores.Maintainability.score_min_value
+  - type: max
+    column: scores.Maintainability.score
+    must_be: <=
+    value: 5.0
+    name: scores.Maintainability.score_max_value
+  - type: missing_count
+    column: scores.Maintainability.evidence
+    must_be: '='
+    value: 0
+    name: scores.Maintainability.evidence_no_missing_values
+  - type: missing_count
+    column: scores.Maintainability.notes
+    must_be: '='
+    value: 0
+    name: scores.Maintainability.notes_no_missing_values
 lineage:
   downstream: []

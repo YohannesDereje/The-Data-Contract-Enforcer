@@ -100,6 +100,176 @@ schema:
       unique: false
 quality:
   type: SodaChecks
-  checks: []
+  checks:
+  - type: missing_count
+    column: id
+    must_be: '='
+    value: 0
+    name: id_no_missing_values
+  - type: duplicate_count
+    column: id
+    must_be: '='
+    value: 0
+    name: id_no_duplicates
+  - type: missing_count
+    column: name
+    must_be: '='
+    value: 0
+    name: name_no_missing_values
+  - type: missing_count
+    column: run_type
+    must_be: '='
+    value: 0
+    name: run_type_no_missing_values
+  - type: missing_count
+    column: parent_run_id
+    must_be: '='
+    value: 0
+    name: parent_run_id_no_missing_values
+  - type: missing_count
+    column: session_id
+    must_be: '='
+    value: 0
+    name: session_id_no_missing_values
+  - type: missing_count
+    column: start_time
+    must_be: '='
+    value: 0
+    name: start_time_no_missing_values
+  - type: duplicate_count
+    column: start_time
+    must_be: '='
+    value: 0
+    name: start_time_no_duplicates
+  - type: missing_count
+    column: end_time
+    must_be: '='
+    value: 0
+    name: end_time_no_missing_values
+  - type: duplicate_count
+    column: end_time
+    must_be: '='
+    value: 0
+    name: end_time_no_duplicates
+  - type: missing_count
+    column: outputs
+    must_be: '='
+    value: 0
+    name: outputs_no_missing_values
+  - type: missing_count
+    column: prompt_tokens
+    must_be: '='
+    value: 0
+    name: prompt_tokens_no_missing_values
+  - type: min
+    column: prompt_tokens
+    must_be: '>='
+    value: 0
+    name: prompt_tokens_min_value
+  - type: max
+    column: prompt_tokens
+    must_be: <=
+    value: 3950
+    name: prompt_tokens_max_value
+  - type: missing_count
+    column: completion_tokens
+    must_be: '='
+    value: 0
+    name: completion_tokens_no_missing_values
+  - type: min
+    column: completion_tokens
+    must_be: '>='
+    value: 0
+    name: completion_tokens_min_value
+  - type: max
+    column: completion_tokens
+    must_be: <=
+    value: 1019
+    name: completion_tokens_max_value
+  - type: missing_count
+    column: total_tokens
+    must_be: '='
+    value: 0
+    name: total_tokens_no_missing_values
+  - type: min
+    column: total_tokens
+    must_be: '>='
+    value: 0
+    name: total_tokens_min_value
+  - type: max
+    column: total_tokens
+    must_be: <=
+    value: 4315
+    name: total_tokens_max_value
+  - type: missing_count
+    column: total_cost
+    must_be: '='
+    value: 0
+    name: total_cost_no_missing_values
+  - type: min
+    column: total_cost
+    must_be: '>='
+    value: 0.0
+    name: total_cost_min_value
+  - type: max
+    column: total_cost
+    must_be: <=
+    value: 0.09699
+    name: total_cost_max_value
+  - type: missing_count
+    column: error
+    must_be: '='
+    value: 0
+    name: error_no_missing_values
+  - type: missing_count
+    column: status
+    must_be: '='
+    value: 0
+    name: status_no_missing_values
+  - type: missing_count
+    column: inputs.doc_id
+    must_be: '='
+    value: 0
+    name: inputs.doc_id_no_missing_values
+  - type: missing_count
+    column: inputs.messages
+    must_be: '='
+    value: 0
+    name: inputs.messages_no_missing_values
+  - type: missing_count
+    column: outputs.generations
+    must_be: '='
+    value: 0
+    name: outputs.generations_no_missing_values
+  - type: missing_count
+    column: inputs.path
+    must_be: '='
+    value: 0
+    name: inputs.path_no_missing_values
+  - type: missing_count
+    column: outputs.status
+    must_be: '='
+    value: 0
+    name: outputs.status_no_missing_values
+  - type: missing_count
+    column: outputs.bytes_read
+    must_be: '='
+    value: 0
+    name: outputs.bytes_read_no_missing_values
+  - type: duplicate_count
+    column: outputs.bytes_read
+    must_be: '='
+    value: 0
+    name: outputs.bytes_read_no_duplicates
+  - type: min
+    column: outputs.bytes_read
+    must_be: '>='
+    value: 6824.0
+    name: outputs.bytes_read_min_value
+  - type: max
+    column: outputs.bytes_read
+    must_be: <=
+    value: 511822.0
+    name: outputs.bytes_read_max_value
 lineage:
   downstream: []

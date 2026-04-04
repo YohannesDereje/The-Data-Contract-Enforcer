@@ -82,9 +82,52 @@ def create_bitol_contract(system_name: str, first_record: dict, profiling_metada
     contract_id = f"{system_name}-contract-v1"
     contract: dict[str, Any] = {"kind": "DataContract", "apiVersion": "v3.0.0", "id": contract_id, "info": {"title": f"{system_name.capitalize()} Contract", "version": "1.0.0"}, "servers": {"local": {"type": "local", "path": SYSTEM_DATA_MAP[system_name], "format": "jsonl"}}, "schema": {}, "quality": {}, "lineage": {}}
     contract["schema"] = build_schema_from_sample(first_record, "", profiling_metadata)
-    if subscriptions: contract["lineage"] = {"downstream": [s for s in subscriptions if s.get("contract_id") == contract_id]}
-    checks = [{"type": "missing_count", "column": c, "must_be": "=", "value": 0, "name": f"{c}_not_null"} for c, m in profiling_metadata.items() if (m.get('p_missing') or 1) == 0]
-    contract["quality"] = {"type": "SodaChecks", "checks": checks}
+    if subscriptions:
+        contract["lineage"] = {"downstream": [s for s in subscriptions if s.get("contract_id") == contract_id]}
+
+    checks: list[dict[str, Any]] = []
+    for column_name, column_meta in profiling_metadata.items():
+        checks.append({
+            "type": "missing_count",
+            "column": column_name,
+            "must_be": "=",
+            "value": 0,
+            "name": f"{column_name}_no_missing_values",
+        })
+
+        if column_meta.get("is_unique"):
+            checks.append({
+                "type": "duplicate_count",
+                "column": column_name,
+                "must_be": "=",
+                "value": 0,
+                "name": f"{column_name}_no_duplicates",
+            })
+
+        if column_meta.get("type") == "Numeric":
+            if "confidence" in column_name:
+                col_min, col_max = 0.0, 1.0
+            else:
+                col_min = column_meta.get("min")
+                col_max = column_meta.get("max")
+
+            if col_min is not None:
+                checks.append({
+                    "type": "min", "column": column_name,
+                    "must_be": ">=", "value": col_min,
+                    "name": f"{column_name}_min_value",
+                })
+            if col_max is not None:
+                checks.append({
+                    "type": "max", "column": column_name,
+                    "must_be": "<=", "value": col_max,
+                    "name": f"{column_name}_max_value",
+                })
+
+    contract["quality"] = {
+        "type": "SodaChecks",
+        "checks": checks,
+    }
     return contract
 
 def create_dbt_schema_yml(system_name: str, profiling_metadata: dict[str, Any]) -> dict[str, Any]:

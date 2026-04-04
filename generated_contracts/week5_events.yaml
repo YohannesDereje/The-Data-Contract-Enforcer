@@ -129,7 +129,607 @@ schema:
           unique: false
 quality:
   type: SodaChecks
-  checks: []
+  checks:
+  - type: missing_count
+    column: event_id
+    must_be: '='
+    value: 0
+    name: event_id_no_missing_values
+  - type: duplicate_count
+    column: event_id
+    must_be: '='
+    value: 0
+    name: event_id_no_duplicates
+  - type: missing_count
+    column: event_type
+    must_be: '='
+    value: 0
+    name: event_type_no_missing_values
+  - type: missing_count
+    column: aggregate_id
+    must_be: '='
+    value: 0
+    name: aggregate_id_no_missing_values
+  - type: missing_count
+    column: aggregate_type
+    must_be: '='
+    value: 0
+    name: aggregate_type_no_missing_values
+  - type: missing_count
+    column: sequence_number
+    must_be: '='
+    value: 0
+    name: sequence_number_no_missing_values
+  - type: min
+    column: sequence_number
+    must_be: '>='
+    value: 1
+    name: sequence_number_min_value
+  - type: max
+    column: sequence_number
+    must_be: <=
+    value: 9
+    name: sequence_number_max_value
+  - type: missing_count
+    column: schema_version
+    must_be: '='
+    value: 0
+    name: schema_version_no_missing_values
+  - type: missing_count
+    column: occurred_at
+    must_be: '='
+    value: 0
+    name: occurred_at_no_missing_values
+  - type: duplicate_count
+    column: occurred_at
+    must_be: '='
+    value: 0
+    name: occurred_at_no_duplicates
+  - type: missing_count
+    column: recorded_at
+    must_be: '='
+    value: 0
+    name: recorded_at_no_missing_values
+  - type: duplicate_count
+    column: recorded_at
+    must_be: '='
+    value: 0
+    name: recorded_at_no_duplicates
+  - type: missing_count
+    column: payload.agent_id
+    must_be: '='
+    value: 0
+    name: payload.agent_id_no_missing_values
+  - type: missing_count
+    column: payload.loaded_at
+    must_be: '='
+    value: 0
+    name: payload.loaded_at_no_missing_values
+  - type: duplicate_count
+    column: payload.loaded_at
+    must_be: '='
+    value: 0
+    name: payload.loaded_at_no_duplicates
+  - type: missing_count
+    column: payload.session_id
+    must_be: '='
+    value: 0
+    name: payload.session_id_no_missing_values
+  - type: missing_count
+    column: payload.model_version
+    must_be: '='
+    value: 0
+    name: payload.model_version_no_missing_values
+  - type: missing_count
+    column: payload.context_source
+    must_be: '='
+    value: 0
+    name: payload.context_source_no_missing_values
+  - type: missing_count
+    column: payload.context_token_count
+    must_be: '='
+    value: 0
+    name: payload.context_token_count_no_missing_values
+  - type: min
+    column: payload.context_token_count
+    must_be: '>='
+    value: 2048.0
+    name: payload.context_token_count_min_value
+  - type: max
+    column: payload.context_token_count
+    must_be: <=
+    value: 4096.0
+    name: payload.context_token_count_max_value
+  - type: missing_count
+    column: payload.event_replay_from_position
+    must_be: '='
+    value: 0
+    name: payload.event_replay_from_position_no_missing_values
+  - type: min
+    column: payload.event_replay_from_position
+    must_be: '>='
+    value: 0.0
+    name: payload.event_replay_from_position_min_value
+  - type: max
+    column: payload.event_replay_from_position
+    must_be: <=
+    value: 0.0
+    name: payload.event_replay_from_position_max_value
+  - type: missing_count
+    column: metadata.causation_id
+    must_be: '='
+    value: 0
+    name: metadata.causation_id_no_missing_values
+  - type: missing_count
+    column: metadata.correlation_id
+    must_be: '='
+    value: 0
+    name: metadata.correlation_id_no_missing_values
+  - type: missing_count
+    column: metadata.user_id
+    must_be: '='
+    value: 0
+    name: metadata.user_id_no_missing_values
+  - type: missing_count
+    column: metadata.source_service
+    must_be: '='
+    value: 0
+    name: metadata.source_service_no_missing_values
+  - type: missing_count
+    column: payload.applicant_id
+    must_be: '='
+    value: 0
+    name: payload.applicant_id_no_missing_values
+  - type: duplicate_count
+    column: payload.applicant_id
+    must_be: '='
+    value: 0
+    name: payload.applicant_id_no_duplicates
+  - type: missing_count
+    column: payload.loan_purpose
+    must_be: '='
+    value: 0
+    name: payload.loan_purpose_no_missing_values
+  - type: missing_count
+    column: payload.submitted_at
+    must_be: '='
+    value: 0
+    name: payload.submitted_at_no_missing_values
+  - type: duplicate_count
+    column: payload.submitted_at
+    must_be: '='
+    value: 0
+    name: payload.submitted_at_no_duplicates
+  - type: missing_count
+    column: payload.application_id
+    must_be: '='
+    value: 0
+    name: payload.application_id_no_missing_values
+  - type: missing_count
+    column: payload.submission_channel
+    must_be: '='
+    value: 0
+    name: payload.submission_channel_no_missing_values
+  - type: missing_count
+    column: payload.requested_amount_usd
+    must_be: '='
+    value: 0
+    name: payload.requested_amount_usd_no_missing_values
+  - type: duplicate_count
+    column: payload.requested_amount_usd
+    must_be: '='
+    value: 0
+    name: payload.requested_amount_usd_no_duplicates
+  - type: missing_count
+    column: payload.priority
+    must_be: '='
+    value: 0
+    name: payload.priority_no_missing_values
+  - type: missing_count
+    column: payload.requested_at
+    must_be: '='
+    value: 0
+    name: payload.requested_at_no_missing_values
+  - type: missing_count
+    column: payload.assigned_agent_id
+    must_be: '='
+    value: 0
+    name: payload.assigned_agent_id_no_missing_values
+  - type: duplicate_count
+    column: payload.assigned_agent_id
+    must_be: '='
+    value: 0
+    name: payload.assigned_agent_id_no_duplicates
+  - type: missing_count
+    column: payload.risk_tier
+    must_be: '='
+    value: 0
+    name: payload.risk_tier_no_missing_values
+  - type: missing_count
+    column: payload.completed_at
+    must_be: '='
+    value: 0
+    name: payload.completed_at_no_missing_values
+  - type: missing_count
+    column: payload.input_data_hash
+    must_be: '='
+    value: 0
+    name: payload.input_data_hash_no_missing_values
+  - type: missing_count
+    column: payload.confidence_score
+    must_be: '='
+    value: 0
+    name: payload.confidence_score_no_missing_values
+  - type: min
+    column: payload.confidence_score
+    must_be: '>='
+    value: 0.0
+    name: payload.confidence_score_min_value
+  - type: max
+    column: payload.confidence_score
+    must_be: <=
+    value: 1.0
+    name: payload.confidence_score_max_value
+  - type: missing_count
+    column: payload.regulatory_basis
+    must_be: '='
+    value: 0
+    name: payload.regulatory_basis_no_missing_values
+  - type: missing_count
+    column: payload.analysis_duration_ms
+    must_be: '='
+    value: 0
+    name: payload.analysis_duration_ms_no_missing_values
+  - type: min
+    column: payload.analysis_duration_ms
+    must_be: '>='
+    value: 914.0
+    name: payload.analysis_duration_ms_min_value
+  - type: max
+    column: payload.analysis_duration_ms
+    must_be: <=
+    value: 2474.0
+    name: payload.analysis_duration_ms_max_value
+  - type: missing_count
+    column: payload.recommended_limit_usd
+    must_be: '='
+    value: 0
+    name: payload.recommended_limit_usd_no_missing_values
+  - type: missing_count
+    column: payload.fraud_score
+    must_be: '='
+    value: 0
+    name: payload.fraud_score_no_missing_values
+  - type: min
+    column: payload.fraud_score
+    must_be: '>='
+    value: 0.013
+    name: payload.fraud_score_min_value
+  - type: max
+    column: payload.fraud_score
+    must_be: <=
+    value: 0.832
+    name: payload.fraud_score_max_value
+  - type: missing_count
+    column: payload.screened_at
+    must_be: '='
+    value: 0
+    name: payload.screened_at_no_missing_values
+  - type: missing_count
+    column: payload.anomaly_flags
+    must_be: '='
+    value: 0
+    name: payload.anomaly_flags_no_missing_values
+  - type: missing_count
+    column: payload.screening_model_version
+    must_be: '='
+    value: 0
+    name: payload.screening_model_version_no_missing_values
+  - type: missing_count
+    column: payload.checks_required
+    must_be: '='
+    value: 0
+    name: payload.checks_required_no_missing_values
+  - type: missing_count
+    column: payload.regulation_set_version
+    must_be: '='
+    value: 0
+    name: payload.regulation_set_version_no_missing_values
+  - type: missing_count
+    column: payload.rule_id
+    must_be: '='
+    value: 0
+    name: payload.rule_id_no_missing_values
+  - type: missing_count
+    column: payload.rule_version
+    must_be: '='
+    value: 0
+    name: payload.rule_version_no_missing_values
+  - type: missing_count
+    column: payload.evidence_hash
+    must_be: '='
+    value: 0
+    name: payload.evidence_hash_no_missing_values
+  - type: missing_count
+    column: payload.evaluation_timestamp
+    must_be: '='
+    value: 0
+    name: payload.evaluation_timestamp_no_missing_values
+  - type: duplicate_count
+    column: payload.evaluation_timestamp
+    must_be: '='
+    value: 0
+    name: payload.evaluation_timestamp_no_duplicates
+  - type: missing_count
+    column: payload.issued_at
+    must_be: '='
+    value: 0
+    name: payload.issued_at_no_missing_values
+  - type: missing_count
+    column: payload.checks_passed
+    must_be: '='
+    value: 0
+    name: payload.checks_passed_no_missing_values
+  - type: missing_count
+    column: payload.issuing_agent_id
+    must_be: '='
+    value: 0
+    name: payload.issuing_agent_id_no_missing_values
+  - type: missing_count
+    column: payload.generated_at
+    must_be: '='
+    value: 0
+    name: payload.generated_at_no_missing_values
+  - type: duplicate_count
+    column: payload.generated_at
+    must_be: '='
+    value: 0
+    name: payload.generated_at_no_duplicates
+  - type: missing_count
+    column: payload.model_versions.credit
+    must_be: '='
+    value: 0
+    name: payload.model_versions.credit_no_missing_values
+  - type: missing_count
+    column: payload.model_versions.orchestrator
+    must_be: '='
+    value: 0
+    name: payload.model_versions.orchestrator_no_missing_values
+  - type: missing_count
+    column: payload.recommendation
+    must_be: '='
+    value: 0
+    name: payload.recommendation_no_missing_values
+  - type: missing_count
+    column: payload.orchestrator_agent_id
+    must_be: '='
+    value: 0
+    name: payload.orchestrator_agent_id_no_missing_values
+  - type: duplicate_count
+    column: payload.orchestrator_agent_id
+    must_be: '='
+    value: 0
+    name: payload.orchestrator_agent_id_no_duplicates
+  - type: missing_count
+    column: payload.decision_basis_summary
+    must_be: '='
+    value: 0
+    name: payload.decision_basis_summary_no_missing_values
+  - type: missing_count
+    column: payload.contributing_agent_sessions
+    must_be: '='
+    value: 0
+    name: payload.contributing_agent_sessions_no_missing_values
+  - type: missing_count
+    column: payload.override
+    must_be: '='
+    value: 0
+    name: payload.override_no_missing_values
+  - type: missing_count
+    column: payload.reviewed_at
+    must_be: '='
+    value: 0
+    name: payload.reviewed_at_no_missing_values
+  - type: duplicate_count
+    column: payload.reviewed_at
+    must_be: '='
+    value: 0
+    name: payload.reviewed_at_no_duplicates
+  - type: missing_count
+    column: payload.reviewer_id
+    must_be: '='
+    value: 0
+    name: payload.reviewer_id_no_missing_values
+  - type: duplicate_count
+    column: payload.reviewer_id
+    must_be: '='
+    value: 0
+    name: payload.reviewer_id_no_duplicates
+  - type: missing_count
+    column: payload.final_decision
+    must_be: '='
+    value: 0
+    name: payload.final_decision_no_missing_values
+  - type: missing_count
+    column: payload.override_reason
+    must_be: '='
+    value: 0
+    name: payload.override_reason_no_missing_values
+  - type: missing_count
+    column: payload.conditions
+    must_be: '='
+    value: 0
+    name: payload.conditions_no_missing_values
+  - type: missing_count
+    column: payload.approved_by
+    must_be: '='
+    value: 0
+    name: payload.approved_by_no_missing_values
+  - type: duplicate_count
+    column: payload.approved_by
+    must_be: '='
+    value: 0
+    name: payload.approved_by_no_duplicates
+  - type: missing_count
+    column: payload.interest_rate
+    must_be: '='
+    value: 0
+    name: payload.interest_rate_no_missing_values
+  - type: min
+    column: payload.interest_rate
+    must_be: '>='
+    value: 0.0
+    name: payload.interest_rate_min_value
+  - type: max
+    column: payload.interest_rate
+    must_be: <=
+    value: 0.0
+    name: payload.interest_rate_max_value
+  - type: missing_count
+    column: payload.effective_date
+    must_be: '='
+    value: 0
+    name: payload.effective_date_no_missing_values
+  - type: duplicate_count
+    column: payload.effective_date
+    must_be: '='
+    value: 0
+    name: payload.effective_date_no_duplicates
+  - type: missing_count
+    column: payload.approved_amount_usd
+    must_be: '='
+    value: 0
+    name: payload.approved_amount_usd_no_missing_values
+  - type: duplicate_count
+    column: payload.approved_amount_usd
+    must_be: '='
+    value: 0
+    name: payload.approved_amount_usd_no_duplicates
+  - type: missing_count
+    column: payload.declined_at
+    must_be: '='
+    value: 0
+    name: payload.declined_at_no_missing_values
+  - type: duplicate_count
+    column: payload.declined_at
+    must_be: '='
+    value: 0
+    name: payload.declined_at_no_duplicates
+  - type: missing_count
+    column: payload.declined_by
+    must_be: '='
+    value: 0
+    name: payload.declined_by_no_missing_values
+  - type: duplicate_count
+    column: payload.declined_by
+    must_be: '='
+    value: 0
+    name: payload.declined_by_no_duplicates
+  - type: missing_count
+    column: payload.decline_reasons
+    must_be: '='
+    value: 0
+    name: payload.decline_reasons_no_missing_values
+  - type: missing_count
+    column: payload.adverse_action_notice_required
+    must_be: '='
+    value: 0
+    name: payload.adverse_action_notice_required_no_missing_values
+  - type: missing_count
+    column: payload.entity_id
+    must_be: '='
+    value: 0
+    name: payload.entity_id_no_missing_values
+  - type: missing_count
+    column: payload.chain_valid
+    must_be: '='
+    value: 0
+    name: payload.chain_valid_no_missing_values
+  - type: duplicate_count
+    column: payload.chain_valid
+    must_be: '='
+    value: 0
+    name: payload.chain_valid_no_duplicates
+  - type: missing_count
+    column: payload.entity_type
+    must_be: '='
+    value: 0
+    name: payload.entity_type_no_missing_values
+  - type: missing_count
+    column: payload.previous_hash
+    must_be: '='
+    value: 0
+    name: payload.previous_hash_no_missing_values
+  - type: duplicate_count
+    column: payload.previous_hash
+    must_be: '='
+    value: 0
+    name: payload.previous_hash_no_duplicates
+  - type: missing_count
+    column: payload.integrity_hash
+    must_be: '='
+    value: 0
+    name: payload.integrity_hash_no_missing_values
+  - type: duplicate_count
+    column: payload.integrity_hash
+    must_be: '='
+    value: 0
+    name: payload.integrity_hash_no_duplicates
+  - type: missing_count
+    column: payload.check_timestamp
+    must_be: '='
+    value: 0
+    name: payload.check_timestamp_no_missing_values
+  - type: duplicate_count
+    column: payload.check_timestamp
+    must_be: '='
+    value: 0
+    name: payload.check_timestamp_no_duplicates
+  - type: missing_count
+    column: payload.tamper_detected
+    must_be: '='
+    value: 0
+    name: payload.tamper_detected_no_missing_values
+  - type: duplicate_count
+    column: payload.tamper_detected
+    must_be: '='
+    value: 0
+    name: payload.tamper_detected_no_duplicates
+  - type: missing_count
+    column: payload.events_verified_count
+    must_be: '='
+    value: 0
+    name: payload.events_verified_count_no_missing_values
+  - type: min
+    column: payload.events_verified_count
+    must_be: '>='
+    value: 9.0
+    name: payload.events_verified_count_min_value
+  - type: max
+    column: payload.events_verified_count
+    must_be: <=
+    value: 9.0
+    name: payload.events_verified_count_max_value
+  - type: missing_count
+    column: payload.TAMPERED_BY
+    must_be: '='
+    value: 0
+    name: payload.TAMPERED_BY_no_missing_values
+  - type: duplicate_count
+    column: payload.TAMPERED_BY
+    must_be: '='
+    value: 0
+    name: payload.TAMPERED_BY_no_duplicates
+  - type: missing_count
+    column: payload.modified_at
+    must_be: '='
+    value: 0
+    name: payload.modified_at_no_missing_values
+  - type: duplicate_count
+    column: payload.modified_at
+    must_be: '='
+    value: 0
+    name: payload.modified_at_no_duplicates
 lineage:
   downstream:
   - contract_id: week5-contract-v1

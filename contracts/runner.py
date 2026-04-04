@@ -19,6 +19,16 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="File path to the YAML contract to be executed "
              "(e.g. 'generated_contracts/week3_extractions.yaml').",
     )
+    parser.add_argument(
+        "--mode",
+        default="AUDIT",
+        choices=["AUDIT", "WARN", "ENFORCE"],
+        help=(
+            "Enforcement mode. "
+            "AUDIT/WARN: always exit 0 regardless of results. "
+            "ENFORCE: exit 1 if any CRITICAL or HIGH severity check fails."
+        ),
+    )
     return parser
 
 
@@ -45,14 +55,18 @@ def load_contract(contract_path: Path) -> dict:
 
 
 def load_data_from_contract(contract: dict) -> tuple[pd.DataFrame, Path]:
-    """Load the data file referenced in the contract's servers section.
+    """Load and flatten the data file referenced in the contract's servers section.
+
+    The flattening strategy mirrors load_and_flatten_data in generator.py exactly,
+    so that column names in the DataFrame match the column names used when the
+    quality checks were generated.
 
     Args:
         contract: A parsed Bitol contract dictionary.
 
     Returns:
-        A tuple of (DataFrame, data_path). The DataFrame has one row per JSONL
-        record (unflattened). data_path is returned for snapshot_id computation.
+        A tuple of (DataFrame, data_path). The DataFrame is flattened in the same
+        way as the generator. data_path is returned for snapshot_id computation.
 
     Raises:
         KeyError: If the expected server path key is missing from the contract.
@@ -81,7 +95,34 @@ def load_data_from_contract(contract: dict) -> tuple[pd.DataFrame, Path]:
             if line:
                 records.append(json.loads(line))
 
-    df = pd.DataFrame(records)
+    # Derive the system name from the contract id (e.g. "week3-contract-v1" -> "week3").
+    system_name = contract.get("id", "").split("-contract-")[0]
+
+    if system_name == "week1":
+        df = pd.json_normalize(
+            records,
+            record_path=["code_refs"],
+            meta=["intent_id", "description", "created_at"],
+            meta_prefix="meta_",
+            sep=".",
+        )
+    elif system_name == "week3":
+        df = pd.json_normalize(
+            records,
+            record_path=["extracted_facts"],
+            meta=[
+                "doc_id", "source_path", "extraction_model", "extracted_at",
+                ["token_count", "input"], ["token_count", "output"],
+            ],
+            meta_prefix="meta_",
+            sep=".",
+        )
+    else:
+        df = pd.DataFrame(
+            [pd.json_normalize(rec, sep=".").to_dict("records")[0] for rec in records]
+        )
+
+    print(f"  DataFrame shape after flattening: {df.shape}")
     return df, data_path
 
 
@@ -108,10 +149,10 @@ _OPERATORS = {
 }
 
 _CHECK_SEVERITY: dict[str, str] = {
-    "missing_count": "error",
-    "duplicate_count": "error",
-    "min": "error",
-    "max": "error",
+    "missing_count": "CRITICAL",
+    "duplicate_count": "CRITICAL",
+    "min": "HIGH",
+    "max": "HIGH",
 }
 
 
@@ -350,6 +391,16 @@ if __name__ == "__main__":
             f"{report['passed']} passed, {report['failed']} failed, "
             f"{report['warned']} warned, {report['errored']} errored."
         )
+
+        exit_code = 0
+        if args.mode == "ENFORCE":
+            for result in report["results"]:
+                if result["status"] == "FAIL" and result["severity"] in ("CRITICAL", "HIGH"):
+                    exit_code = 1
+                    break
+
+        print(f"Mode: {args.mode} — exiting with code {exit_code}.")
+        raise SystemExit(exit_code)
     except (FileNotFoundError, KeyError) as exc:
         print(f"\nError: {exc}")
         raise SystemExit(1)

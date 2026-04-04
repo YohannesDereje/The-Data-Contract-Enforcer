@@ -81,7 +81,57 @@ schema:
       unique: false
 quality:
   type: SodaChecks
-  checks: []
+  checks:
+  - type: missing_count
+    column: snapshot_id
+    must_be: '='
+    value: 0
+    name: snapshot_id_no_missing_values
+  - type: duplicate_count
+    column: snapshot_id
+    must_be: '='
+    value: 0
+    name: snapshot_id_no_duplicates
+  - type: missing_count
+    column: codebase_root
+    must_be: '='
+    value: 0
+    name: codebase_root_no_missing_values
+  - type: duplicate_count
+    column: codebase_root
+    must_be: '='
+    value: 0
+    name: codebase_root_no_duplicates
+  - type: missing_count
+    column: git_commit
+    must_be: '='
+    value: 0
+    name: git_commit_no_missing_values
+  - type: duplicate_count
+    column: git_commit
+    must_be: '='
+    value: 0
+    name: git_commit_no_duplicates
+  - type: missing_count
+    column: captured_at
+    must_be: '='
+    value: 0
+    name: captured_at_no_missing_values
+  - type: duplicate_count
+    column: captured_at
+    must_be: '='
+    value: 0
+    name: captured_at_no_duplicates
+  - type: missing_count
+    column: nodes
+    must_be: '='
+    value: 0
+    name: nodes_no_missing_values
+  - type: missing_count
+    column: edges
+    must_be: '='
+    value: 0
+    name: edges_no_missing_values
 lineage:
   downstream:
   - contract_id: week4-contract-v1

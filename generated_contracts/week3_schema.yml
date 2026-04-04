@@ -1,0 +1,30 @@
+version: 2
+models:
+- name: week3_model
+  columns:
+  - name: fact_id
+    tests:
+    - unique
+  - name: text
+    tests: []
+  - name: confidence
+    tests: []
+  - name: page_ref
+    tests: []
+  - name: source_excerpt
+    tests: []
+  - name: entity_refs
+    tests: []
+  - name: meta_doc_id
+    tests: []
+  - name: meta_source_path
+    tests: []
+  - name: meta_extraction_model
+    tests: []
+  - name: meta_extracted_at
+    tests:
+    - unique
+  - name: meta_token_count.input
+    tests: []
+  - name: meta_token_count.output
+    tests: []

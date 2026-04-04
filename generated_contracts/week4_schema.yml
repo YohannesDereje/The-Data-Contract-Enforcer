@@ -1,0 +1,20 @@
+version: 2
+models:
+- name: week4_model
+  columns:
+  - name: snapshot_id
+    tests:
+    - unique
+  - name: codebase_root
+    tests:
+    - unique
+  - name: git_commit
+    tests:
+    - unique
+  - name: captured_at
+    tests:
+    - unique
+  - name: nodes
+    tests: []
+  - name: edges
+    tests: []

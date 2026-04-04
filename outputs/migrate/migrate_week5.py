@@ -1,76 +1,133 @@
+import csv
 import json
+import re
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
-import pandas as pd
 
-# The source file from your project root
+
+# NOTE: The spec references 'events.jsonl' in the project root, but the actual
+# source file is 'week5_events.csv'. This script reads the CSV directly since
+# it contains the exact columns the mapping requires (event_id, stream_id,
+# stream_position, payload, recorded_at, event_type).
 SOURCE_FILE = Path("week5_events.csv")
 TARGET_FILE = Path("outputs/week5/events.jsonl")
 
-def parse_payload(raw: object) -> dict:
-    """Parse a JSON string into a dict; return empty dict on failure."""
-    if not raw or (isinstance(raw, float)):
+# Namespace for deterministic correlation_id generation per aggregate_id.
+_CORRELATION_NS = uuid.UUID("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
+
+
+def _to_pascal_case(text: str) -> str:
+    """Convert any-case string to PascalCase.
+
+    Works for snake_case, kebab-case, space-separated, or already PascalCase.
+    Examples:
+        "loan_application_started" -> "LoanApplicationStarted"
+        "CreditScoreChecked"       -> "CreditScoreChecked"  (unchanged)
+    """
+    # If no word separators are present, the string is already PascalCase
+    # (or a single word). Return it unchanged to avoid lowercasing the interior.
+    if not re.search(r"[_\-\s]", text):
+        return text
+
+    tokens = re.split(r"[_\-\s]+", text)
+    return "".join(word.capitalize() for word in tokens if word)
+
+
+def _parse_payload(raw: str) -> dict:
+    """Safely parse a JSON string into a dict; return empty dict on failure."""
+    if not raw or not raw.strip():
         return {}
     try:
-        return json.loads(str(raw))
+        return json.loads(raw)
     except (json.JSONDecodeError, TypeError):
         return {}
 
-def migrate():
-    print(f"--- Starting Week 5 Migration ---")
-    print(f"Source file: {SOURCE_FILE}")
-    print(f"Target file: {TARGET_FILE}")
-    
-    if not SOURCE_FILE.is_file():
-        print(f"ERROR: Source file not found at {SOURCE_FILE}")
-        print("Please ensure 'week5_events.csv' is in the project root directory.")
-        return
+
+def transform_record(source_record: dict) -> dict:
+    """Transform one CSV row (as a dict) into a canonical event_record.
+
+    Field mapping from source CSV columns:
+        event_id        -> event_id
+        stream_id       -> aggregate_id
+        stream_position -> sequence_number  (cast to int)
+        payload         -> payload          (JSON-parsed)
+        recorded_at     -> occurred_at, recorded_at
+        event_type      -> event_type       (converted to PascalCase)
+
+    All other canonical fields are synthesised.
+
+    Args:
+        source_record: A dict of raw CSV column values.
+
+    Returns:
+        A canonical event_record dictionary.
+    """
+    aggregate_id = source_record.get("stream_id") or ""
+    raw_position = source_record.get("stream_position") or "0"
+
+    try:
+        sequence_number = int(raw_position)
+    except ValueError:
+        sequence_number = 0
+
+    event_type_raw = source_record.get("event_type") or ""
+    event_type = _to_pascal_case(event_type_raw) if event_type_raw else ""
+
+    metadata = {
+        "causation_id": None,
+        "correlation_id": str(uuid.uuid5(_CORRELATION_NS, aggregate_id))
+        if aggregate_id
+        else None,
+        "user_id": "system",
+        "source_service": "week5-event-sourcing-platform",
+    }
+
+    return {
+        "event_id": source_record.get("event_id"),
+        "event_type": event_type,
+        "aggregate_id": aggregate_id,
+        "aggregate_type": "LoanApplication",
+        "sequence_number": sequence_number,
+        "payload": _parse_payload(source_record.get("payload") or ""),
+        "schema_version": "1.0",
+        "occurred_at": source_record.get("recorded_at"),
+        "recorded_at": source_record.get("recorded_at"),
+        "metadata": metadata,
+    }
+
+
+def migrate() -> None:
+    """Read week5_events.csv, transform every row, write canonical JSONL."""
+    print(f"Starting migration: {SOURCE_FILE} -> {TARGET_FILE}")
 
     TARGET_FILE.parent.mkdir(parents=True, exist_ok=True)
-    
-    # Reading with dtype=str is a good defensive practice
-    df = pd.read_csv(SOURCE_FILE, dtype=str)
-    print(f"Loaded {len(df)} rows from {SOURCE_FILE}")
 
-    namespace = uuid.UUID("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
-    correlation_cache: dict[str, str] = {}
-    def get_correlation_id(aggregate_id: str) -> str:
-        if aggregate_id not in correlation_cache:
-            correlation_cache[aggregate_id] = str(uuid.uuid5(namespace, aggregate_id))
-        return correlation_cache[aggregate_id]
+    if not SOURCE_FILE.exists():
+        print(f"ERROR: Source file '{SOURCE_FILE}' not found.")
+        raise SystemExit(1)
 
-    count = 0
+    print(f"Reading source records from: {SOURCE_FILE}")
+    source_records: list[dict] = []
+    with SOURCE_FILE.open("r", encoding="utf-8", newline="") as src:
+        reader = csv.DictReader(src)
+        for row in reader:
+            source_records.append(dict(row))
+
+    print(f"  Loaded {len(source_records)} source record(s).")
+
+    canonical_records: list[dict] = []
+    for source_record in source_records:
+        canonical_records.append(transform_record(source_record))
+
+    print(f"  Transformation complete. {len(canonical_records)} canonical record(s) ready.")
+
     with TARGET_FILE.open("w", encoding="utf-8") as dst:
-        for _, row in df.iterrows():
-            # Use the ACTUAL column names from your CSV
-            aggregate_id = row.get("entity_id")
-            
-            # Handle potential missing sequence numbers
-            sequence_num_str = row.get("version")
-            sequence_number = int(sequence_num_str) if pd.notna(sequence_num_str) else None
+        for record in canonical_records:
+            dst.write(json.dumps(record) + "\n")
 
-            canonical = {
-                "event_id": row.get("event_id"),
-                "event_type": row.get("event_type"),
-                "aggregate_id": aggregate_id,
-                "aggregate_type": "LoanApplication",
-                "sequence_number": sequence_number,
-                "payload": parse_payload(row.get("event_data")), # Use 'event_data'
-                "schema_version": "1.0",
-                "occurred_at": row.get("timestamp"), # Use 'timestamp'
-                "recorded_at": row.get("timestamp"), # Use 'timestamp'
-                "metadata": {
-                    "causation_id": None,
-                    "correlation_id": get_correlation_id(str(aggregate_id)) if aggregate_id else None,
-                    "user_id": "system",
-                    "source_service": "database-export",
-                },
-            }
-            dst.write(json.dumps(canonical) + "\n")
-            count += 1
-            
-    print(f"\n--- Migration Complete ---")
-    print(f"Successfully migrated {count} records to {TARGET_FILE}")
+    print(f"Migration complete. {len(canonical_records)} records written to {TARGET_FILE}")
+
 
 if __name__ == "__main__":
     migrate()

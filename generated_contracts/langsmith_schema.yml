@@ -1,0 +1,48 @@
+version: 2
+models:
+- name: langsmith_model
+  columns:
+  - name: id
+    tests:
+    - unique
+  - name: name
+    tests: []
+  - name: run_type
+    tests: []
+  - name: parent_run_id
+    tests: []
+  - name: session_id
+    tests: []
+  - name: start_time
+    tests:
+    - unique
+  - name: end_time
+    tests:
+    - unique
+  - name: outputs
+    tests: []
+  - name: prompt_tokens
+    tests: []
+  - name: completion_tokens
+    tests: []
+  - name: total_tokens
+    tests: []
+  - name: total_cost
+    tests: []
+  - name: error
+    tests: []
+  - name: status
+    tests: []
+  - name: inputs.doc_id
+    tests: []
+  - name: inputs.messages
+    tests: []
+  - name: outputs.generations
+    tests: []
+  - name: inputs.path
+    tests: []
+  - name: outputs.status
+    tests: []
+  - name: outputs.bytes_read
+    tests:
+    - unique

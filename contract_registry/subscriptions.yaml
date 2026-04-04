@@ -1,0 +1,70 @@
+# This file is manually maintained and acts as the single source of truth
+# for downstream dependencies on data contracts.
+subscriptions:
+  # Dependency: Week 4 (Cartographer) consumes data from Week 3 (Refinery)
+  - contract_id: "week3-contract-v1"
+    subscriber_id: "week4-cartographer"
+    subscriber_team: "week4-data-lineage"
+    fields_consumed:
+      - "doc_id"
+      - "extracted_facts"
+    breaking_fields:
+      - field: "doc_id"
+        reason: "Primary key for node identity in the lineage graph."
+      - field: "extracted_facts.confidence"
+        reason: "Used for weighting edges; a scale change breaks ranking logic."
+    validation_mode: "ENFORCE"
+    registered_at: "2026-03-15T10:00:00Z"
+    contact: "week4-team-lead@example.com"
+
+  # Dependency: Week 7 (Enforcer) consumes data from Week 4 (Cartographer)
+  - contract_id: "week4-contract-v1"
+    subscriber_id: "week7-violation-attributor"
+    subscriber_team: "week7-data-governance"
+    fields_consumed:
+      - "nodes"
+      - "edges"
+      - "git_commit"
+    breaking_fields:
+      - field: "nodes.node_id"
+        reason: "Required for graph traversal and identifying entities."
+      - field: "edges.source"
+        reason: "Required for backward traversal in blame chain analysis."
+    validation_mode: "ENFORCE"
+    registered_at: "2026-03-16T11:00:00Z"
+    contact: "week7-oncall@example.com"
+
+  # Dependency: Week 7 (Enforcer) consumes data from Week 5 (Event Sourcing)
+  - contract_id: "week5-contract-v1"
+    subscriber_id: "week7-schema-validator"
+    subscriber_team: "week7-data-governance"
+    fields_consumed:
+      - "event_type"
+      - "payload"
+    breaking_fields:
+      - field: "event_type"
+        reason: "Used to look up the correct JSON Schema for payload validation."
+      - field: "payload"
+        reason: "The entire object is validated; any structural change is breaking."
+    validation_mode: "AUDIT"
+    registered_at: "2026-03-17T12:00:00Z"
+    contact: "week7-oncall@example.com"
+
+  # Dependency: Week 7 (Enforcer) consumes data from LangSmith
+  - contract_id: "langsmith-traces-v1"
+    subscriber_id: "week7-ai-contract-extensions"
+    subscriber_team: "week7-data-governance"
+    fields_consumed:
+      - "run_type"
+      - "total_tokens"
+      - "prompt_tokens"
+      - "completion_tokens"
+      - "total_cost"
+    breaking_fields:
+      - field: "total_tokens"
+        reason: "Breaks cost and usage analysis if not equal to prompt + completion tokens."
+      - field: "total_cost"
+        reason: "Directly used for cost monitoring; any change breaks alerting."
+    validation_mode: "WARN"
+    registered_at: "2026-03-18T13:00:00Z"
+    contact: "ai-observability-team@example.com"

@@ -1,0 +1,101 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: week4-contract-v1
+info:
+  title: Week4 Contract
+  version: 1.0.0
+servers:
+  local:
+    type: local
+    path: outputs/week4/lineage_snapshots.jsonl
+    format: jsonl
+schema:
+  type: object
+  properties:
+    snapshot_id:
+      type: string
+      description: Field 'snapshot_id' of type string.
+      required: true
+      unique: true
+    codebase_root:
+      type: string
+      description: Field 'codebase_root' of type string.
+      required: true
+      unique: true
+    git_commit:
+      type: string
+      description: Field 'git_commit' of type string.
+      required: true
+      unique: true
+    captured_at:
+      type: string
+      description: Field 'captured_at' of type string.
+      required: true
+      unique: true
+    nodes:
+      type: array
+      items:
+        type: object
+        properties:
+          node_id:
+            type: string
+          type:
+            type: string
+          label:
+            type: string
+          metadata:
+            type: object
+            properties:
+              path:
+                type: string
+              language:
+                type: string
+              purpose:
+                type: string
+              last_modified:
+                type: string
+        description: Field 'nodes' of type object.
+        required: true
+        unique: false
+      description: Field 'nodes' of type array.
+      required: true
+      unique: false
+    edges:
+      type: array
+      items:
+        type: object
+        properties:
+          source:
+            type: string
+          target:
+            type: string
+          relationship:
+            type: string
+          confidence:
+            type: number
+        description: Field 'edges' of type object.
+        required: true
+        unique: false
+      description: Field 'edges' of type array.
+      required: true
+      unique: false
+quality:
+  type: SodaChecks
+  checks: []
+lineage:
+  downstream:
+  - contract_id: week4-contract-v1
+    subscriber_id: week7-violation-attributor
+    subscriber_team: week7-data-governance
+    fields_consumed:
+    - nodes
+    - edges
+    - git_commit
+    breaking_fields:
+    - field: nodes.node_id
+      reason: Required for graph traversal and identifying entities.
+    - field: edges.source
+      reason: Required for backward traversal in blame chain analysis.
+    validation_mode: ENFORCE
+    registered_at: '2026-03-16T11:00:00Z'
+    contact: week7-oncall@example.com

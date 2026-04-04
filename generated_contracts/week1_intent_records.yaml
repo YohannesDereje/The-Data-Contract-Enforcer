@@ -1,0 +1,53 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: week1-contract-v1
+info:
+  title: Week1 Contract
+  version: 1.0.0
+servers:
+  local:
+    type: local
+    path: outputs/week1/intent_records.jsonl
+    format: jsonl
+schema:
+  type: object
+  properties:
+    intent_id:
+      type: string
+      description: Field 'intent_id' of type string.
+      required: true
+      unique: false
+    description:
+      type: string
+      description: Field 'description' of type string.
+      required: true
+      unique: false
+    created_at:
+      type: string
+      description: Field 'created_at' of type string.
+      required: true
+      unique: false
+    governance_tags:
+      type: array
+      items:
+        type: string
+    code_refs:
+      type: array
+      items:
+        type: object
+        properties:
+          file:
+            type: string
+          line_start:
+            type: number
+          line_end:
+            type: number
+          symbol:
+            type: string
+          confidence:
+            type: number
+quality:
+  type: SodaChecks
+  checks: []
+lineage:
+  downstream: []

@@ -1,0 +1,105 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: langsmith-contract-v1
+info:
+  title: Langsmith Contract
+  version: 1.0.0
+servers:
+  local:
+    type: local
+    path: outputs/traces/runs.jsonl
+    format: jsonl
+schema:
+  type: object
+  properties:
+    id:
+      type: string
+      description: Field 'id' of type string.
+      required: true
+      unique: true
+    name:
+      type: string
+      description: Field 'name' of type string.
+      required: true
+      unique: false
+    run_type:
+      type: string
+      description: Field 'run_type' of type string.
+      required: true
+      unique: false
+    parent_run_id:
+      type: string
+      description: 'Field ''parent_run_id'' of type string. Warning: 33.3% missing.'
+      required: false
+      unique: false
+    session_id:
+      type: string
+      description: Field 'session_id' of type string.
+      required: true
+      unique: false
+    start_time:
+      type: string
+      description: Field 'start_time' of type string.
+      required: true
+      unique: true
+    end_time:
+      type: string
+      description: Field 'end_time' of type string.
+      required: true
+      unique: true
+    inputs:
+      type: object
+      properties:
+        doc_id:
+          type: string
+          description: 'Field ''inputs.doc_id'' of type string. Warning: 66.7% missing.'
+          required: false
+          unique: false
+    outputs:
+      type: string
+      description: 'Field ''outputs'' of type string. Warning: 100.0% missing.'
+      required: false
+      unique: false
+    prompt_tokens:
+      type: number
+      description: Field 'prompt_tokens' of type number.
+      required: true
+      unique: false
+      minimum: 0
+      maximum: 3950
+    completion_tokens:
+      type: number
+      description: Field 'completion_tokens' of type number.
+      required: true
+      unique: false
+      minimum: 0
+      maximum: 1019
+    total_tokens:
+      type: number
+      description: Field 'total_tokens' of type number.
+      required: true
+      unique: false
+      minimum: 0
+      maximum: 4315
+    total_cost:
+      type: number
+      description: Field 'total_cost' of type number.
+      required: true
+      unique: false
+      minimum: 0.0
+      maximum: 0.09699
+    error:
+      type: string
+      description: 'Field ''error'' of type string. Warning: 100.0% missing.'
+      required: false
+      unique: false
+    status:
+      type: string
+      description: Field 'status' of type string.
+      required: true
+      unique: false
+quality:
+  type: SodaChecks
+  checks: []
+lineage:
+  downstream: []

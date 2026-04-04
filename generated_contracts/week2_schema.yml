@@ -1,0 +1,52 @@
+version: 2
+models:
+- name: week2_model
+  columns:
+  - name: verdict_id
+    tests:
+    - unique
+  - name: target_ref
+    tests: []
+  - name: rubric_id
+    tests: []
+  - name: rubric_version
+    tests: []
+  - name: evaluated_at
+    tests:
+    - unique
+  - name: confidence
+    tests: []
+  - name: overall_score
+    tests: []
+  - name: overall_verdict
+    tests: []
+  - name: scores.Correctness.score
+    tests: []
+  - name: scores.Correctness.evidence
+    tests: []
+  - name: scores.Correctness.notes
+    tests: []
+  - name: scores.Security.score
+    tests: []
+  - name: scores.Security.evidence
+    tests: []
+  - name: scores.Security.notes
+    tests: []
+  - name: scores.Readability.score
+    tests: []
+  - name: scores.Readability.evidence
+    tests: []
+  - name: scores.Readability.notes
+    tests: []
+  - name: scores.Testability.score
+    tests: []
+  - name: scores.Testability.evidence
+    tests: []
+  - name: scores.Testability.notes
+    tests: []
+  - name: scores.Maintainability.score
+    tests: []
+  - name: scores.Maintainability.evidence
+    tests: []
+  - name: scores.Maintainability.notes
+    tests: []

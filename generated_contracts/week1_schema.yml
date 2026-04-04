@@ -1,0 +1,20 @@
+version: 2
+models:
+- name: week1_model
+  columns:
+  - name: file
+    tests: []
+  - name: line_start
+    tests: []
+  - name: line_end
+    tests: []
+  - name: symbol
+    tests: []
+  - name: confidence
+    tests: []
+  - name: meta_intent_id
+    tests: []
+  - name: meta_description
+    tests: []
+  - name: meta_created_at
+    tests: []

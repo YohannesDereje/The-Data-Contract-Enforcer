@@ -2,163 +2,147 @@ kind: DataContract
 apiVersion: v3.0.0
 id: week5-contract-v1
 info:
-  title: Week5 Data Contract
+  title: Week5 Contract
   version: 1.0.0
-  owner: data-engineering
-  description: Auto-generated data contract for the week5 system, produced by the
-    Data Contract Enforcer pipeline.
 servers:
   local:
     type: local
     path: outputs/week5/events.jsonl
     format: jsonl
-terms:
-  usage: Internal analytics and downstream contract validation only.
-  limitations: Not for use in production serving without manual review.
 schema:
-  event_id:
-    type: string
-    required: true
-    unique: true
-    description: Field 'event_id' of type string.
-    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-  event_type:
-    type: string
-    required: true
-    unique: false
-    description: Field 'event_type' of type string.
-  aggregate_id:
-    type: string
-    required: false
-    unique: false
-    description: 'Field ''aggregate_id'' of type string. Warning: 100.0% of values
-      are missing.'
-  aggregate_type:
-    type: string
-    required: true
-    unique: false
-    description: Field 'aggregate_type' of type string.
-    enum:
-    - LoanApplication
-  sequence_number:
-    type: string
-    required: false
-    unique: false
-    description: 'Field ''sequence_number'' of type string. Warning: 100.0% of values
-      are missing.'
-  schema_version:
-    type: string
-    required: true
-    unique: false
-    description: Field 'schema_version' of type string.
-    enum:
-    - '1.0'
-  occurred_at:
-    type: string
-    required: false
-    unique: false
-    description: 'Field ''occurred_at'' of type string. Warning: 100.0% of values
-      are missing.'
-  recorded_at:
-    type: string
-    required: false
-    unique: false
-    description: 'Field ''recorded_at'' of type string. Warning: 100.0% of values
-      are missing.'
-  metadata.causation_id:
-    type: string
-    required: false
-    unique: false
-    description: 'Field ''metadata.causation_id'' of type string. Warning: 100.0%
-      of values are missing.'
-  metadata.correlation_id:
-    type: string
-    required: false
-    unique: false
-    description: 'Field ''metadata.correlation_id'' of type string. Warning: 100.0%
-      of values are missing.'
-  metadata.user_id:
-    type: string
-    required: true
-    unique: false
-    description: Field 'metadata.user_id' of type string.
-    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - system
-  metadata.source_service:
-    type: string
-    required: true
-    unique: false
-    description: Field 'metadata.source_service' of type string.
-    enum:
-    - database-export
+  type: object
+  properties:
+    event_id:
+      type: string
+      description: Field 'event_id' of type string.
+      required: true
+      unique: true
+    event_type:
+      type: string
+      description: Field 'event_type' of type string.
+      required: true
+      unique: false
+    aggregate_id:
+      type: string
+      description: Field 'aggregate_id' of type string.
+      required: true
+      unique: false
+    aggregate_type:
+      type: string
+      description: Field 'aggregate_type' of type string.
+      required: true
+      unique: false
+    sequence_number:
+      type: number
+      description: Field 'sequence_number' of type number.
+      required: true
+      unique: false
+      minimum: 1
+      maximum: 9
+    payload:
+      type: object
+      properties:
+        agent_id:
+          type: string
+          description: 'Field ''payload.agent_id'' of type string. Warning: 66.1%
+            missing.'
+          required: false
+          unique: false
+        loaded_at:
+          type: string
+          description: 'Field ''payload.loaded_at'' of type string. Warning: 88.7%
+            missing.'
+          required: false
+          unique: true
+        session_id:
+          type: string
+          description: 'Field ''payload.session_id'' of type string. Warning: 77.4%
+            missing.'
+          required: false
+          unique: false
+        model_version:
+          type: string
+          description: 'Field ''payload.model_version'' of type string. Warning: 77.4%
+            missing.'
+          required: false
+          unique: false
+        context_source:
+          type: string
+          description: 'Field ''payload.context_source'' of type string. Warning:
+            88.7% missing.'
+          required: false
+          unique: false
+        context_token_count:
+          type: number
+          description: 'Field ''payload.context_token_count'' of type number. Warning:
+            88.7% missing.'
+          required: false
+          unique: false
+          minimum: 2048.0
+          maximum: 4096.0
+        event_replay_from_position:
+          type: number
+          description: 'Field ''payload.event_replay_from_position'' of type number.
+            Warning: 88.7% missing.'
+          required: false
+          unique: false
+          minimum: 0.0
+          maximum: 0.0
+    schema_version:
+      type: string
+      description: Field 'schema_version' of type string.
+      required: true
+      unique: false
+    occurred_at:
+      type: string
+      description: Field 'occurred_at' of type string.
+      required: true
+      unique: true
+    recorded_at:
+      type: string
+      description: Field 'recorded_at' of type string.
+      required: true
+      unique: true
+    metadata:
+      type: object
+      properties:
+        causation_id:
+          type: string
+          description: 'Field ''metadata.causation_id'' of type string. Warning: 100.0%
+            missing.'
+          required: false
+          unique: false
+        correlation_id:
+          type: string
+          description: Field 'metadata.correlation_id' of type string.
+          required: true
+          unique: false
+        user_id:
+          type: string
+          description: Field 'metadata.user_id' of type string.
+          required: true
+          unique: false
+        source_service:
+          type: string
+          description: Field 'metadata.source_service' of type string.
+          required: true
+          unique: false
 quality:
   type: SodaChecks
-  checks:
-  - type: missing_count
-    column: event_id
-    must_be: '='
-    value: 0
-    name: event_id_no_missing_values
-  - type: duplicate_count
-    column: event_id
-    must_be: '='
-    value: 0
-    name: event_id_no_duplicates
-  - type: missing_count
-    column: event_type
-    must_be: '='
-    value: 0
-    name: event_type_no_missing_values
-  - type: missing_count
-    column: aggregate_id
-    must_be: '='
-    value: 0
-    name: aggregate_id_no_missing_values
-  - type: missing_count
-    column: aggregate_type
-    must_be: '='
-    value: 0
-    name: aggregate_type_no_missing_values
-  - type: missing_count
-    column: sequence_number
-    must_be: '='
-    value: 0
-    name: sequence_number_no_missing_values
-  - type: missing_count
-    column: schema_version
-    must_be: '='
-    value: 0
-    name: schema_version_no_missing_values
-  - type: missing_count
-    column: occurred_at
-    must_be: '='
-    value: 0
-    name: occurred_at_no_missing_values
-  - type: missing_count
-    column: recorded_at
-    must_be: '='
-    value: 0
-    name: recorded_at_no_missing_values
-  - type: missing_count
-    column: metadata.causation_id
-    must_be: '='
-    value: 0
-    name: metadata.causation_id_no_missing_values
-  - type: missing_count
-    column: metadata.correlation_id
-    must_be: '='
-    value: 0
-    name: metadata.correlation_id_no_missing_values
-  - type: missing_count
-    column: metadata.user_id
-    must_be: '='
-    value: 0
-    name: metadata.user_id_no_missing_values
-  - type: missing_count
-    column: metadata.source_service
-    must_be: '='
-    value: 0
-    name: metadata.source_service_no_missing_values
+  checks: []
 lineage:
-  downstream: []
+  downstream:
+  - contract_id: week5-contract-v1
+    subscriber_id: week7-schema-validator
+    subscriber_team: week7-data-governance
+    fields_consumed:
+    - event_type
+    - payload
+    breaking_fields:
+    - field: event_type
+      reason: Used to look up the correct JSON Schema for payload validation.
+    - field: payload
+      reason: The entire object is validated; any structural change is breaking.
+    validation_mode: AUDIT
+    registered_at: '2026-03-17T12:00:00Z'
+    contact: week7-oncall@example.com

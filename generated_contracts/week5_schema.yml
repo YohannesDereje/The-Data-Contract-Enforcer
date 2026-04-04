@@ -1,0 +1,187 @@
+version: 2
+models:
+- name: week5_model
+  columns:
+  - name: event_id
+    tests:
+    - unique
+  - name: event_type
+    tests: []
+  - name: aggregate_id
+    tests: []
+  - name: aggregate_type
+    tests: []
+  - name: sequence_number
+    tests: []
+  - name: schema_version
+    tests: []
+  - name: occurred_at
+    tests:
+    - unique
+  - name: recorded_at
+    tests:
+    - unique
+  - name: payload.agent_id
+    tests: []
+  - name: payload.loaded_at
+    tests:
+    - unique
+  - name: payload.session_id
+    tests: []
+  - name: payload.model_version
+    tests: []
+  - name: payload.context_source
+    tests: []
+  - name: payload.context_token_count
+    tests: []
+  - name: payload.event_replay_from_position
+    tests: []
+  - name: metadata.causation_id
+    tests: []
+  - name: metadata.correlation_id
+    tests: []
+  - name: metadata.user_id
+    tests: []
+  - name: metadata.source_service
+    tests: []
+  - name: payload.applicant_id
+    tests:
+    - unique
+  - name: payload.loan_purpose
+    tests: []
+  - name: payload.submitted_at
+    tests:
+    - unique
+  - name: payload.application_id
+    tests: []
+  - name: payload.submission_channel
+    tests: []
+  - name: payload.requested_amount_usd
+    tests:
+    - unique
+  - name: payload.priority
+    tests: []
+  - name: payload.requested_at
+    tests: []
+  - name: payload.assigned_agent_id
+    tests:
+    - unique
+  - name: payload.risk_tier
+    tests: []
+  - name: payload.completed_at
+    tests: []
+  - name: payload.input_data_hash
+    tests: []
+  - name: payload.confidence_score
+    tests: []
+  - name: payload.regulatory_basis
+    tests: []
+  - name: payload.analysis_duration_ms
+    tests: []
+  - name: payload.recommended_limit_usd
+    tests: []
+  - name: payload.fraud_score
+    tests: []
+  - name: payload.screened_at
+    tests: []
+  - name: payload.anomaly_flags
+    tests: []
+  - name: payload.screening_model_version
+    tests: []
+  - name: payload.checks_required
+    tests: []
+  - name: payload.regulation_set_version
+    tests: []
+  - name: payload.rule_id
+    tests: []
+  - name: payload.rule_version
+    tests: []
+  - name: payload.evidence_hash
+    tests: []
+  - name: payload.evaluation_timestamp
+    tests:
+    - unique
+  - name: payload.issued_at
+    tests: []
+  - name: payload.checks_passed
+    tests: []
+  - name: payload.issuing_agent_id
+    tests: []
+  - name: payload.generated_at
+    tests:
+    - unique
+  - name: payload.model_versions.credit
+    tests: []
+  - name: payload.model_versions.orchestrator
+    tests: []
+  - name: payload.recommendation
+    tests: []
+  - name: payload.orchestrator_agent_id
+    tests:
+    - unique
+  - name: payload.decision_basis_summary
+    tests: []
+  - name: payload.contributing_agent_sessions
+    tests: []
+  - name: payload.override
+    tests: []
+  - name: payload.reviewed_at
+    tests:
+    - unique
+  - name: payload.reviewer_id
+    tests:
+    - unique
+  - name: payload.final_decision
+    tests: []
+  - name: payload.override_reason
+    tests: []
+  - name: payload.conditions
+    tests: []
+  - name: payload.approved_by
+    tests:
+    - unique
+  - name: payload.interest_rate
+    tests: []
+  - name: payload.effective_date
+    tests:
+    - unique
+  - name: payload.approved_amount_usd
+    tests:
+    - unique
+  - name: payload.declined_at
+    tests:
+    - unique
+  - name: payload.declined_by
+    tests:
+    - unique
+  - name: payload.decline_reasons
+    tests: []
+  - name: payload.adverse_action_notice_required
+    tests: []
+  - name: payload.entity_id
+    tests: []
+  - name: payload.chain_valid
+    tests:
+    - unique
+  - name: payload.entity_type
+    tests: []
+  - name: payload.previous_hash
+    tests:
+    - unique
+  - name: payload.integrity_hash
+    tests:
+    - unique
+  - name: payload.check_timestamp
+    tests:
+    - unique
+  - name: payload.tamper_detected
+    tests:
+    - unique
+  - name: payload.events_verified_count
+    tests: []
+  - name: payload.TAMPERED_BY
+    tests:
+    - unique
+  - name: payload.modified_at
+    tests:
+    - unique

@@ -1,0 +1,124 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: week2-contract-v1
+info:
+  title: Week2 Contract
+  version: 1.0.0
+servers:
+  local:
+    type: local
+    path: outputs/week2/verdicts.jsonl
+    format: jsonl
+schema:
+  type: object
+  properties:
+    verdict_id:
+      type: string
+      description: Field 'verdict_id' of type string.
+      required: true
+      unique: true
+    target_ref:
+      type: string
+      description: Field 'target_ref' of type string.
+      required: true
+      unique: false
+    rubric_id:
+      type: string
+      description: Field 'rubric_id' of type string.
+      required: true
+      unique: false
+    rubric_version:
+      type: string
+      description: Field 'rubric_version' of type string.
+      required: true
+      unique: false
+    evaluated_at:
+      type: string
+      description: Field 'evaluated_at' of type string.
+      required: true
+      unique: true
+    confidence:
+      type: number
+      description: Field 'confidence' of type number.
+      required: true
+      unique: false
+      minimum: 0.0
+      maximum: 1.0
+    overall_score:
+      type: number
+      description: Field 'overall_score' of type number.
+      required: true
+      unique: false
+      minimum: 3.013
+      maximum: 4.878
+    overall_verdict:
+      type: string
+      description: Field 'overall_verdict' of type string.
+      required: true
+      unique: false
+    scores:
+      type: object
+      properties:
+        Correctness:
+          type: object
+          properties:
+            score:
+              type: number
+              description: 'Field ''scores.Correctness.score'' of type number. Warning:
+                54.0% missing.'
+              required: false
+              unique: false
+              minimum: 3.0
+              maximum: 5.0
+            evidence:
+              type: array
+              items:
+                type: string
+                description: 'Field ''scores.Correctness.evidence'' of type string.
+                  Warning: 54.0% missing.'
+                required: false
+                unique: false
+              description: 'Field ''scores.Correctness.evidence'' of type array. Warning:
+                54.0% missing.'
+              required: false
+              unique: false
+            notes:
+              type: string
+              description: 'Field ''scores.Correctness.notes'' of type string. Warning:
+                54.0% missing.'
+              required: false
+              unique: false
+        Security:
+          type: object
+          properties:
+            score:
+              type: number
+              description: 'Field ''scores.Security.score'' of type number. Warning:
+                52.9% missing.'
+              required: false
+              unique: false
+              minimum: 3.0
+              maximum: 5.0
+            evidence:
+              type: array
+              items:
+                type: string
+                description: 'Field ''scores.Security.evidence'' of type string. Warning:
+                  52.9% missing.'
+                required: false
+                unique: false
+              description: 'Field ''scores.Security.evidence'' of type array. Warning:
+                52.9% missing.'
+              required: false
+              unique: false
+            notes:
+              type: string
+              description: 'Field ''scores.Security.notes'' of type string. Warning:
+                52.9% missing.'
+              required: false
+              unique: false
+quality:
+  type: SodaChecks
+  checks: []
+lineage:
+  downstream: []

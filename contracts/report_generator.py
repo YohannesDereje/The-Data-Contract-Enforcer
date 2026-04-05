@@ -179,14 +179,29 @@ def summarize_violations(violations: list[dict]) -> list[str]:
         blame_chain = violation.get("blame_chain", [])
         blast_radius = violation.get("blast_radius", {})
 
+        # Pre-extract key fields to guide the LLM unambiguously.
+        subscriber_id = (
+            blast_radius.get("affected_nodes", ["unknown"])[0]
+            if blast_radius.get("affected_nodes")
+            else "unknown"
+        )
+        commit_summary = blame_chain[0].get("summary", "unknown change") if blame_chain else "unknown change"
+        # check_id is typically "{column_name}_{check_type}" — expose the column part.
+        column_name = check_id.split("_")[0] if "_" in check_id else check_id
+
         user_prompt = (
-            f"Here is a data quality violation:\n\n"
-            f"Failing check: {check_id}\n"
-            f"Blame chain: {json.dumps(blame_chain, indent=2)}\n"
-            f"Blast radius: {json.dumps(blast_radius, indent=2)}\n\n"
-            "Explain this data quality failure in one plain-English sentence, "
-            "suitable for a manager, naming the failing field and the impacted "
-            "downstream systems."
+            f"You are given a structured data quality violation record. "
+            f"You MUST produce exactly ONE sentence using the template below.\n\n"
+            f"VIOLATION JSON:\n"
+            f"  check_id      : {check_id}\n"
+            f"  column_name   : {column_name}   ← use this as the failing field name\n"
+            f"  commit_summary: {commit_summary}   ← use this as the cause\n"
+            f"  subscriber_id : {subscriber_id}   ← use this as the impacted system\n\n"
+            f"Full blame chain for context:\n{json.dumps(blame_chain, indent=2)}\n"
+            f"Full blast radius for context:\n{json.dumps(blast_radius, indent=2)}\n\n"
+            f"REQUIRED OUTPUT FORMAT (fill in the placeholders, output nothing else):\n"
+            f"\"A failure in the '{{column_name}}' field, likely caused by '{{commit_summary}}', "
+            f"is impacting the '{{subscriber_id}}' system.\""
         )
 
         response = client.chat.completions.create(
@@ -195,9 +210,10 @@ def summarize_violations(violations: list[dict]) -> list[str]:
                 {
                     "role": "system",
                     "content": (
-                        "You are a data engineering assistant. Your job is to "
-                        "translate technical data contract violations into clear, "
-                        "concise summaries for non-technical stakeholders."
+                        "You are a data engineering assistant that translates technical "
+                        "data contract violations into manager-facing summaries. "
+                        "You always follow the exact output format given in the user prompt "
+                        "and never deviate from it or add extra text."
                     ),
                 },
                 {"role": "user", "content": user_prompt},
@@ -328,31 +344,66 @@ def assess_ai_risks(ai_results: dict) -> dict:
     return assessment
 
 
-def generate_recommendations(violations: list[dict]) -> list[str]:
+def generate_recommendations(violations: list[dict], contract_id: str = "unknown") -> list[str]:
     """Use an LLM to generate actionable fix recommendations from violations.
 
     Focuses on the most significant (first) violation and asks the model to
-    produce 1-3 concrete, engineer-facing recommendations.
+    produce 1-3 concrete, engineer-facing recommendations in the exact rubric
+    format required.
 
     Args:
         violations: List of violation dicts from the violation log.
+        contract_id: The contract identifier, used to populate the recommendation
+            template's contract clause reference.
 
     Returns:
-        A list of recommendation strings.
+        A list of recommendation strings, each following the required format.
     """
     if not violations:
         return ["No violations found, no actions required."]
 
     top_violation = violations[0]
+    blame_chain = top_violation.get("blame_chain", [])
+    check_id = top_violation.get("check_id", "unknown")
+
+    # Pre-extract every field the LLM needs so there is no ambiguity.
+    file_path = blame_chain[0].get("file_path", "unknown/file.py") if blame_chain else "unknown/file.py"
+    # check_id is typically "{column_name}_{check_type}" — expose both parts.
+    if "_" in check_id:
+        parts = check_id.split("_")
+        failing_field = parts[0]
+        check_type = "_".join(parts[1:])
+    else:
+        failing_field = check_id
+        check_type = "unknown"
 
     user_prompt = (
-        f"Here is a data quality violation:\n\n"
+        f"You are reviewing a data quality incident. "
+        f"You MUST generate between 1 and 3 recommendations. "
+        f"Each recommendation MUST be a single sentence in the EXACT format shown below.\n\n"
+        f"VIOLATION CONTEXT (use these values to fill in the template):\n"
+        f"  file_path     : {file_path}\n"
+        f"    ← Source: first entry in 'blame_chain[].file_path'\n"
+        f"  failing_field : {failing_field}\n"
+        f"    ← Source: the column/field part of 'check_id' (before the first underscore)\n"
+        f"  check_type    : {check_type}\n"
+        f"    ← Source: the remainder of 'check_id' (after the first underscore)\n"
+        f"  contract_id   : {contract_id}\n"
+        f"    ← The data contract being enforced\n"
+        f"  check_id      : {check_id}\n"
+        f"    ← The specific clause that was violated\n\n"
+        f"Full violation JSON for additional context:\n"
         f"{json.dumps(top_violation, indent=2)}\n\n"
-        "Generate a prioritized list of 1-3 specific, actionable recommendations "
-        "for an engineer to fix this data quality failure. Each recommendation must "
-        "be a single sentence and follow this exact format: "
-        "'Update [file_path] to fix the [failing_field] issue related to the "
-        "[check_type] check.' Use the data from the blame_chain to identify the file_path."
+        f"REQUIRED OUTPUT FORMAT for EACH recommendation (fill in placeholders):\n"
+        f"\"Update [file_path] to output [failing_field] as [expected_type/format] "
+        f"per contract [contract_id] clause [check_id].\"\n\n"
+        f"Rules:\n"
+        f"- Output ONLY the numbered recommendation sentences — no preamble, no extra text.\n"
+        f"- Use the exact file_path, failing_field, contract_id, and check_id values above.\n"
+        f"- For [expected_type/format], infer the correct type or constraint from the check_type "
+        f"and violation details (e.g., 'a non-null string', 'a value >= 0', 'a unique identifier').\n"
+        f"- If there are additional entries in the blame_chain, generate one recommendation per "
+        f"upstream file, up to a maximum of 3 total recommendations."
     )
 
     response = client.chat.completions.create(
@@ -361,9 +412,12 @@ def generate_recommendations(violations: list[dict]) -> list[str]:
             {
                 "role": "system",
                 "content": (
-                    "You are a senior data engineering assistant. Your job is to "
-                    "produce specific, actionable recommendations that engineers can "
-                    "act on immediately to resolve data contract violations."
+                    "You are a Principal Engineer reviewing a data incident report. "
+                    "Your sole job is to output precise, immediately actionable fix "
+                    "recommendations for engineers. You always follow the exact output "
+                    "format specified in the user prompt without deviation, preamble, "
+                    "or explanation. Every recommendation you produce names a specific "
+                    "file, a specific field, and references the contract clause violated."
                 ),
             },
             {"role": "user", "content": user_prompt},
@@ -409,7 +463,8 @@ def create_final_report_data(
 
     ai_risk_assessment = assess_ai_risks(ai_results)
 
-    recommendations = generate_recommendations(violations)
+    contract_id = validation_report.get("contract_id", "unknown") if validation_report else "unknown"
+    recommendations = generate_recommendations(violations, contract_id)
 
     return {
         "health_score": health_score,

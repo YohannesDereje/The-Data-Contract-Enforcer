@@ -1,5 +1,7 @@
 import json
 import random
+import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -132,15 +134,22 @@ def check_prompt_inputs(records: list[dict]) -> dict:
 def check_output_schema_violation_rate(
     verdict_records: list[dict],
     warn_threshold: float = 0.05,
+    baseline_path: str | Path | None = None,
 ) -> dict:
     """Calculate the rate of LLM output records that violate the verdict enum.
 
     A record is considered a violation if its 'overall_verdict' field contains
     any value other than 'PASS', 'FAIL', or 'WARN'.
 
+    On first run (no baseline file) the current rate is saved as the baseline
+    and the trend is 'BASELINE_SET'. On subsequent runs the trend is compared
+    against the saved baseline rate.
+
     Args:
         verdict_records: List of verdict dictionaries to analyse.
         warn_threshold: Maximum acceptable violation rate before status is WARN.
+        baseline_path: Optional path to a JSON file storing the baseline rate.
+            If None, baseline comparison is skipped.
 
     Returns:
         A dict with keys:
@@ -148,6 +157,7 @@ def check_output_schema_violation_rate(
             schema_violations — count of records with an invalid verdict value
             violation_rate    — violations / total (0.0 if total is 0)
             status            — 'PASS' or 'WARN'
+            trend             — 'BASELINE_SET', 'rising', 'stable', or 'falling'
     """
     valid_verdicts = {"PASS", "FAIL", "WARN"}
     total_outputs = len(verdict_records)
@@ -160,12 +170,58 @@ def check_output_schema_violation_rate(
     violation_rate = schema_violations / total_outputs if total_outputs > 0 else 0.0
     status = "PASS" if violation_rate <= warn_threshold else "WARN"
 
+    # --- Baseline comparison ---
+    trend: str = "N/A"
+    if baseline_path is not None:
+        baseline_path = Path(baseline_path)
+        if not baseline_path.exists():
+            baseline_path.parent.mkdir(parents=True, exist_ok=True)
+            with baseline_path.open("w", encoding="utf-8") as fh:
+                json.dump({"baseline_rate": violation_rate}, fh)
+            trend = "BASELINE_SET"
+        else:
+            with baseline_path.open("r", encoding="utf-8") as fh:
+                baseline_data = json.load(fh)
+            baseline_rate = baseline_data.get("baseline_rate", violation_rate)
+            if violation_rate > baseline_rate:
+                trend = "rising"
+            elif violation_rate < baseline_rate:
+                trend = "falling"
+            else:
+                trend = "stable"
+
     return {
         "total_outputs": total_outputs,
         "schema_violations": schema_violations,
         "violation_rate": round(violation_rate, 6),
         "status": status,
+        "trend": trend,
     }
+
+
+def log_ai_warning(check_name: str, details: dict, rate: float) -> None:
+    """Append a simplified WARNING violation record to the central violation log.
+
+    Args:
+        check_name: The name of the AI check that triggered the warning.
+        details: Additional context dict to include in the record.
+        rate: The violation rate that exceeded the threshold.
+    """
+    record = {
+        "violation_id": str(uuid.uuid4()),
+        "check_id": check_name,
+        "detected_at": datetime.now(timezone.utc).isoformat(),
+        "severity": "WARNING",
+        "message": f"LLM output violation rate of {rate:.2%} exceeds threshold.",
+        "details": details,
+    }
+
+    log_path = Path("violation_log/violations.jsonl")
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    with log_path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(record) + "\n")
+
+    print(f"AI warning logged to: {log_path}  (id={record['violation_id']})")
 
 
 if __name__ == "__main__":
@@ -251,7 +307,22 @@ if __name__ == "__main__":
         "reason": "Manually injected invalid record for violation rate test.",
     })
 
-    violation_result = check_output_schema_violation_rate(verdict_records)
+    output_violation_baseline = Path("schema_snapshots/output_violation_baseline.json")
+
+    violation_result = check_output_schema_violation_rate(
+        verdict_records,
+        baseline_path=output_violation_baseline,
+    )
     print(f"\nAnalysed {violation_result['total_outputs']} verdict record(s) "
           f"(including 1 injected invalid record).")
+    print(f"  status         : {violation_result['status']}")
+    print(f"  violation_rate : {violation_result['violation_rate']}")
+    print(f"  trend          : {violation_result['trend']}")
     print(json.dumps(violation_result, indent=2))
+
+    if violation_result["status"] == "WARN":
+        log_ai_warning(
+            check_name="check_output_schema_violation_rate",
+            details=violation_result,
+            rate=violation_result["violation_rate"],
+        )

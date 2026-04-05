@@ -1,7 +1,7 @@
 {
-  "report_id": "f78d9aea-09a0-4dc8-9efb-fecf302a20c3",
+  "report_id": "2f3bf7c5-b622-4264-b8b3-1c0eb49cd718",
   "contract_id": "week3-contract-v1",
-  "generated_at": "2026-04-04T16:09:43.417511+00:00",
+  "generated_at": "2026-04-04T23:25:58.659550+00:00",
   "compatibility_verdict": "BREAKING",
   "changes": [
     {

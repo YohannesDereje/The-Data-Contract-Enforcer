@@ -51,7 +51,7 @@ subscriptions:
     contact: "week7-oncall@example.com"
 
   # Dependency: Week 7 (Enforcer) consumes data from LangSmith
-  - contract_id: "langsmith-traces-v1"
+  - contract_id: "langsmith-contract-v1"
     subscriber_id: "week7-ai-contract-extensions"
     subscriber_team: "week7-data-governance"
     fields_consumed:
@@ -68,3 +68,57 @@ subscriptions:
     validation_mode: "WARN"
     registered_at: "2026-03-18T13:00:00Z"
     contact: "ai-observability-team@example.com"
+
+  # Dependency: Week 2 (Code Reviewer) consumes intent records from Week 1 (Planner)
+  - contract_id: "week1-contract-v1"
+    subscriber_id: "week2-code-reviewer"
+    subscriber_team: "week2-automated-review"
+    fields_consumed:
+      - "intent_id"
+      - "description"
+      - "code_refs"
+    breaking_fields:
+      - field: "intent_id"
+        reason: "Foreign key linking verdicts back to their originating intent record."
+      - field: "code_refs"
+        reason: "The entire array is iterated to generate per-file verdicts; structural changes break the review loop."
+      - field: "description"
+        reason: "Fed directly into the code review prompt; a type change silently corrupts LLM input."
+    validation_mode: "ENFORCE"
+    registered_at: "2026-03-10T09:00:00Z"
+    contact: "week2-team-lead@example.com"
+
+  # Dependency: Week 7 (Enforcer) consumes intent records from Week 1 (Planner)
+  - contract_id: "week1-contract-v1"
+    subscriber_id: "week7-contract-enforcer"
+    subscriber_team: "week7-data-governance"
+    fields_consumed:
+      - "intent_id"
+      - "created_at"
+      - "code_refs"
+    breaking_fields:
+      - field: "intent_id"
+        reason: "Used as a correlation key when attributing violations to upstream planning decisions."
+      - field: "created_at"
+        reason: "Used for temporal filtering when scoping violation reports to a time window."
+    validation_mode: "AUDIT"
+    registered_at: "2026-03-19T08:00:00Z"
+    contact: "week7-oncall@example.com"
+
+  # Dependency: Week 7 (Enforcer) consumes verdicts from Week 2 (Code Reviewer)
+  - contract_id: "week2-contract-v1"
+    subscriber_id: "week7-contract-enforcer"
+    subscriber_team: "week7-data-governance"
+    fields_consumed:
+      - "verdict_id"
+      - "intent_id"
+      - "overall_verdict"
+      - "code_ref"
+    breaking_fields:
+      - field: "overall_verdict"
+        reason: "Drives the LLM output schema violation rate check; the allowed enum values must remain PASS/FAIL/WARN."
+      - field: "intent_id"
+        reason: "Used to join verdicts back to Week 1 intent records during root-cause attribution."
+    validation_mode: "ENFORCE"
+    registered_at: "2026-03-19T09:00:00Z"
+    contact: "week7-oncall@example.com"

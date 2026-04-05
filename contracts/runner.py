@@ -197,6 +197,32 @@ def _failing_records(
     return 0, []
 
 
+def check_statistical_drift(
+    df: pd.DataFrame,
+    column: str,
+    baseline_stats: dict,
+) -> float:
+    """Calculate how many standard deviations the current column mean has drifted.
+
+    Args:
+        df: The loaded data DataFrame.
+        column: The column name to evaluate.
+        baseline_stats: Dict with keys 'baseline_mean' and 'baseline_stddev'.
+
+    Returns:
+        Drift expressed in number of standard deviations from the baseline mean.
+        Returns 0.0 if baseline_stddev is zero or missing.
+    """
+    current_mean = float(pd.to_numeric(df[column], errors="coerce").mean())
+    baseline_mean = float(baseline_stats.get("baseline_mean", current_mean))
+    baseline_stddev = float(baseline_stats.get("baseline_stddev", 0.0))
+
+    if baseline_stddev == 0.0:
+        return 0.0
+
+    return abs(current_mean - baseline_mean) / baseline_stddev
+
+
 def run_checks(df: pd.DataFrame, checks: list[dict]) -> list[dict]:
     """Execute each quality check against the DataFrame and return results.
 
@@ -212,6 +238,13 @@ def run_checks(df: pd.DataFrame, checks: list[dict]) -> list[dict]:
         A list of result dicts conforming to the required output schema.
     """
     results: list[dict] = []
+
+    # Load baseline stats for statistical_drift checks (gracefully optional).
+    baselines: dict = {}
+    baselines_path = Path("schema_snapshots/baselines.json")
+    if baselines_path.exists():
+        with baselines_path.open("r", encoding="utf-8") as bf:
+            baselines = json.load(bf)
 
     for check in checks:
         check_type = check.get("type")
@@ -247,6 +280,31 @@ def run_checks(df: pd.DataFrame, checks: list[dict]) -> list[dict]:
                 actual = float(pd.to_numeric(df[column], errors="coerce").min())
             elif check_type == "max":
                 actual = float(pd.to_numeric(df[column], errors="coerce").max())
+            elif check_type == "statistical_drift":
+                column_baselines = baselines.get(column, {})
+                drift_stdevs = check_statistical_drift(df, column, column_baselines)
+                if drift_stdevs > 3:
+                    drift_status = "FAIL"
+                elif drift_stdevs > 2:
+                    drift_status = "WARN"
+                else:
+                    drift_status = "PASS"
+                results.append({
+                    "check_id": check_id,
+                    "column_name": column,
+                    "check_type": check_type,
+                    "status": drift_status,
+                    "actual_value": round(drift_stdevs, 4),
+                    "expected": "> 2 stddevs = WARN, > 3 stddevs = FAIL",
+                    "severity": severity,
+                    "records_failing": 0,
+                    "sample_failing": [],
+                    "message": (
+                        f"Statistical drift: {drift_stdevs:.4f} stddevs from baseline. "
+                        f"Status: {drift_status}."
+                    ),
+                })
+                continue
             else:
                 results.append({
                     "check_id": check_id,
@@ -372,6 +430,20 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
+        # Ensure a dummy baselines file exists for statistical drift testing.
+        baselines_path = Path("schema_snapshots/baselines.json")
+        if not baselines_path.exists():
+            baselines_path.parent.mkdir(parents=True, exist_ok=True)
+            dummy_baselines = {
+                "confidence_score": {
+                    "baseline_mean": 0.75,
+                    "baseline_stddev": 0.1,
+                }
+            }
+            with baselines_path.open("w", encoding="utf-8") as bf:
+                bf.write(json.dumps(dummy_baselines, indent=2))
+            print(f"Created dummy baselines file at: {baselines_path}")
+
         contract = load_contract(Path(args.contract_path))
         df, data_path = load_data_from_contract(contract)
         print(f"Loaded data. Shape: {df.shape}")

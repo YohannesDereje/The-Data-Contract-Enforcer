@@ -65,12 +65,6 @@
         }
       }
     },
-    "extraction_model": {
-      "type": "string",
-      "description": "Field 'extraction_model' of type string.",
-      "required": true,
-      "unique": false
-    },
     "processing_time_ms": {
       "type": "number"
     },

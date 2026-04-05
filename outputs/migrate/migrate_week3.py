@@ -64,7 +64,7 @@ def transform_record(source_record: dict) -> dict:
     fact_confidence = round(max(0.80, min(0.98, base_confidence + random.uniform(-0.05, 0.05))), 3)
     
     # **CORRECTED LOGIC**: Always use a realistic model name from the pool.
-    extraction_model = random.choice(_MODELS)
+    #Sextraction_model = random.choice(_MODELS)
 
     # --- Synthesize entities ---
     parties = (source_record.get("details") or {}).get("parties") or random.sample(

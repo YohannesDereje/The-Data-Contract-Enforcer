@@ -124,6 +124,68 @@ def get_blast_radius_from_registry(contract_id: str, subscriptions: list[dict]) 
     return {"affected_nodes": affected}
 
 
+def enrich_blast_radius_with_lineage(
+    blast_radius: dict,
+    lineage: dict | None,
+) -> dict:
+    """Extend a registry-based blast radius with transitively contaminated nodes.
+
+    The registry identifies direct subscribers (depth 0). This function walks
+    the lineage graph **forwards** (source → target, PRODUCES direction) from
+    each of those nodes to discover second- and third-order systems that receive
+    data produced by the directly affected subscribers.
+
+    BFS is used so that contamination_depth accurately reflects the number of
+    hops from the original failure point.
+
+    Args:
+        blast_radius: Dict returned by get_blast_radius_from_registry, containing
+            an 'affected_nodes' list of subscriber ID strings.
+        lineage: The lineage snapshot dict from load_lineage_graph, or None.
+
+    Returns:
+        An enriched blast radius dict with two keys:
+            affected_nodes  — original list of direct subscriber IDs (depth 0)
+            transitive_nodes — list of dicts {node_id, contamination_depth} for
+                              every transitively reachable node beyond depth 0
+    """
+    if lineage is None:
+        return {**blast_radius, "transitive_nodes": []}
+
+    edges: list[dict] = lineage.get("edges", [])
+
+    # Build a forward adjacency map: source_id → [target_id, ...]
+    forward_adj: dict[str, list[str]] = {}
+    for edge in edges:
+        source = edge.get("source", "")
+        target = edge.get("target", "")
+        if source and target:
+            forward_adj.setdefault(source, []).append(target)
+
+    direct_nodes: list[str] = blast_radius.get("affected_nodes", [])
+
+    # BFS starting from all direct nodes at depth 0.
+    visited: set[str] = set(direct_nodes)
+    queue: deque[tuple[str, int]] = deque((node, 0) for node in direct_nodes)
+    transitive_nodes: list[dict] = []
+
+    while queue:
+        current_id, depth = queue.popleft()
+        for child_id in forward_adj.get(current_id, []):
+            if child_id not in visited:
+                visited.add(child_id)
+                transitive_nodes.append({
+                    "node_id": child_id,
+                    "contamination_depth": depth + 1,
+                })
+                queue.append((child_id, depth + 1))
+
+    return {
+        "affected_nodes": direct_nodes,
+        "transitive_nodes": transitive_nodes,
+    }
+
+
 def find_upstream_source_files(contract: dict, lineage: dict) -> list[dict]:
     """Trace the lineage graph backwards from the contract's data file to find
     upstream Python and SQL source files.
@@ -334,7 +396,11 @@ if __name__ == "__main__":
             print("Loaded Lineage Graph with 0 nodes and 0 edges.")
 
         blast_radius = get_blast_radius_from_registry(contract_id, subscriptions)
+        blast_radius = enrich_blast_radius_with_lineage(blast_radius, lineage)
         print(f"\nBlast Radius (from Registry): {blast_radius['affected_nodes']}")
+        print(f"Transitive Contamination ({len(blast_radius['transitive_nodes'])} node(s)):")
+        for node in blast_radius["transitive_nodes"]:
+            print(f"  depth={node['contamination_depth']}  {node['node_id']}")
 
         source_files = find_upstream_source_files(contract, lineage) if lineage is not None else []
         print(f"\nFound {len(source_files)} upstream source file(s).")
